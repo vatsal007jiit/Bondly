@@ -2,10 +2,11 @@ import { FC, ReactNode } from 'react'
 import SideMenu from './SideMenu'
 
 interface ModelInterface{
-    children?:ReactNode
+    children?: ReactNode;
+    title?: string;
 }
 
-const Model: FC<ModelInterface> = ({children}) => {
+const Model: FC<ModelInterface> = ({children,title}) => {
   return (
     <div>
       <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
@@ -13,7 +14,8 @@ const Model: FC<ModelInterface> = ({children}) => {
        <SideMenu/>
 
        {/* Main Feed */}
-       <main className="ml-[18%] mr-[22%] mb-8 flex-1 p-6 space-y-6">
+       <main className="ml-[18%] flex-1 p-6 ">
+         <h1 className="text-3xl font-bold text-center dark:text-white mb-8 drop-shadow-lg">{title}</h1>
          {children} 
        </main>
       </div>    

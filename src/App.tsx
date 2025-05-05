@@ -8,6 +8,7 @@ import Friends from "./components/Friends"
 import FriendRequest from "./components/FriendRequest"
 import SendRequest from "./components/SendRequest"
 import VideoCall from "./components/VideoCall"
+import AudioCall from "./components/AudioCall"
 
 function App() {
  
@@ -34,13 +35,14 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/friend" element={<Friends />}>
-              {/* 👇 Add this index route to render FriendList by default */}
+              {/*  Added index route to render FriendList by default */}
               <Route index element={<FriendList />} />
               <Route path="friendList" element={<FriendList />} />
               <Route path="friendRequest" element={<FriendRequest />} />
               <Route path="sendRequest" element={<SendRequest />} />
             </Route>
             <Route path="/video" element={<VideoCall/>} />
+            <Route path="/audio" element={<AudioCall/>} />
           </Route>
           
           <Route path="/login" element={<Login />} />
