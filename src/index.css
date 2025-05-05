@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+.scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+  .scrollbar-fade {
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .scrollbar-fade::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  .scrollbar-fade:hover {
+    scrollbar-width: thin; /* Firefox */
+  }
+  
+  .scrollbar-fade:hover::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollbar-fade:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.4);
+    border-radius: 4px;
+  }
+  
