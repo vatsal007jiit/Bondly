@@ -3,6 +3,7 @@ import avatar from "../../Images/avatar.webp"
 import { MdOutlineChat } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FcVideoCall } from "react-icons/fc";
+import { Link } from 'react-router-dom';
 
 interface OnlineInterface {
   name: string,
@@ -34,7 +35,7 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, status }) => {
       <div className='flex gap-2 text-xl'>
         <button className='text-blue-600 hover:text-blue-700 hover:scale-105 transition-all cursor-pointer'><MdOutlineChat /></button>
         <button className='text-red-400 hover:text-red-600 hover:scale-105 transition-all cursor-pointer'><IoCallOutline /></button>
-        <button className='hover:scale-110 transition-all cursor-pointer'><FcVideoCall /></button>
+        <button className='hover:scale-110 transition-all cursor-pointer'><Link to='/video'><FcVideoCall /></Link></button>
       </div>
     </div>
   );

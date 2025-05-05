@@ -7,6 +7,7 @@ import FriendList from "./components/FriendList"
 import Friends from "./components/Friends"
 import FriendRequest from "./components/FriendRequest"
 import SendRequest from "./components/SendRequest"
+import VideoCall from "./components/VideoCall"
 
 function App() {
  
@@ -39,7 +40,9 @@ function App() {
               <Route path="friendRequest" element={<FriendRequest />} />
               <Route path="sendRequest" element={<SendRequest />} />
             </Route>
+            <Route path="/video" element={<VideoCall/>} />
           </Route>
+          
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
