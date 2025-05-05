@@ -11,7 +11,7 @@ const SideMenu = () => {
           <h1 className="capitalize">Vatsal Gupta</h1> 
         </div>
         <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/home'>🏠 Home</Link></div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/home'>💬 My Posts</Link></div>
+        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/posts'>💬 My Posts</Link></div>
         <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/friend'>👥 Friends</Link></div>
         <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/home'>👤 Profile</Link></div>
         <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/'>🚪 Logout</Link></div>

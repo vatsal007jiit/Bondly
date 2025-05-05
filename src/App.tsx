@@ -10,26 +10,14 @@ import SendRequest from "./components/SendRequest"
 import VideoCall from "./components/VideoCall"
 import AudioCall from "./components/AudioCall"
 import ChatBox from "./components/ChatBox"
+import MyPost from "./components/MyPost"
+import 'remixicon/fonts/remixicon.css'
+import NotFound from "./components/NotFound"
 
 function App() {
  
 
   return (
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path="/" element={<Login/>}></Route>
-    //     <Route path="/" element={<Layout/>}>
-    //       <Route path="/home" element={<Home/>}></Route>
-    //       <Route path="/friend" element={<Friends/>}>
-    //         <Route path="/friend/friendList" element={<FriendList/>}></Route>
-    //         <Route path="/friend/friendRequest" element={<FriendRequest/>}></Route>
-    //         <Route path="/friend/sendRequest" element={<SendRequest/>}></Route>
-    //       </Route>
-    //     </Route>
-    //     <Route path="/login" element={<Login/>}></Route>
-    //     <Route path="/signup" element={<Signup/>}></Route>
-    //   </Routes>
-    // </BrowserRouter>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -45,10 +33,12 @@ function App() {
             <Route path="/video" element={<VideoCall/>} />
             <Route path="/audio" element={<AudioCall/>} />
             <Route path="/chat" element={<ChatBox/>} />
+            <Route path='/posts' element={<MyPost/>} />
           </Route>
           
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<NotFound/>}></Route>
         </Routes>
     </BrowserRouter>
 

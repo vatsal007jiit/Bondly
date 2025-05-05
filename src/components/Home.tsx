@@ -1,9 +1,9 @@
 import React from "react";
 import avatar from "../Images/avatar.webp";
-import { Link } from "react-router-dom";
 import Btn from "./shared/Btn";
 import OnlineCard from "./shared/OnlineCard";
 import SideMenu from "./shared/SideMenu";
+import Post from "./shared/Post";
 
 const Home: React.FC = () => {
   
@@ -14,9 +14,9 @@ const Home: React.FC = () => {
     <SideMenu/>
 
     {/* Main Feed */}
-    <main className="ml-[18%] mr-[22%] mb-8 flex-1 p-6 space-y-6">
+    <main className="ml-[18%] mr-[22%] mb-8 flex-1 p-6">
       {/* Create Post */}
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-5">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-5 mb-8">
         <textarea
           placeholder="What's on your mind?"
           className="w-full border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -28,21 +28,8 @@ const Home: React.FC = () => {
       </div>
 
       {/* Sample Posts */}
-      {[...Array(15)].map((post) => (
-        <div key={post} className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-5">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-indigo-500 text-white rounded-full flex items-center justify-center font-bold">
-              U{post}
-            </div>
-            <div>
-              <p className="font-semibold text-gray-800 dark:text-white">User {post}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">2h ago</p>
-            </div>
-          </div>
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            This is a sample post from user {post}. Let's build bonds and bridge meaningful relationships here on Bondly!
-          </p>
-        </div>
+      {[...Array(15)].map((_,index) => (
+        <Post key={index} name={"Rahul"} pic={avatar} created={"2025-05-05T07:36:53.299+00:00"} icon="close">Hello Byeeeeee</Post>
       ))}
     </main>
 

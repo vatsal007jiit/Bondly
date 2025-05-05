@@ -62,7 +62,7 @@ const ChatBox: React.FC = () => {
              <label className="relative cursor-pointer">
                     <input type="file" className="hidden" onChange={()=>{console.log('hi')}} />
                     <div className="w-10 h-10 mr-2 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-300 hover:dark:bg-gray-500 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 transition-all">
-                        <GrAttachment className="w-5 h-5" />
+                        <GrAttachment className="text-xl" />
                     </div>
              </label>
              <input
