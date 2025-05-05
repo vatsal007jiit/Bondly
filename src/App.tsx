@@ -9,6 +9,7 @@ import FriendRequest from "./components/FriendRequest"
 import SendRequest from "./components/SendRequest"
 import VideoCall from "./components/VideoCall"
 import AudioCall from "./components/AudioCall"
+import ChatBox from "./components/ChatBox"
 
 function App() {
  
@@ -43,6 +44,7 @@ function App() {
             </Route>
             <Route path="/video" element={<VideoCall/>} />
             <Route path="/audio" element={<AudioCall/>} />
+            <Route path="/chat" element={<ChatBox/>} />
           </Route>
           
           <Route path="/login" element={<Login />} />

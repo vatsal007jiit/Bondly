@@ -47,7 +47,7 @@ const Home: React.FC = () => {
     </main>
 
     {/* Right Panel */}
-    <aside className="fixed top-19 right-0 h-screen overflow-y-auto scrollbar-fade w-[22%] hidden xl:flex flex-col gap-6 p-6 bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 shadow-md border-l border-gray-200 dark:border-gray-700">
+    <aside className="fixed top-19 right-0 h-screen overflow-y-auto scrollbar-fade w-[22%] md:flex flex-col gap-6 p-6 bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 shadow-md border-l border-gray-200 dark:border-gray-700">
           <div>
             <h2 className="text-2xl my-4 font-bold bg-gradient-to-r from-blue-800 to-pink-500 bg-clip-text text-transparent dark:text-indigo-400 border-b-1 border-indigo-200">Contacts</h2>
             <ul className="space-y-2 text-gray-700 dark:text-gray-200 text-sm">

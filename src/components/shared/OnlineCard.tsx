@@ -33,7 +33,7 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, status }) => {
 
       {/* Right icons */}
       <div className='flex gap-2 text-xl'>
-        <button className='text-blue-600 hover:text-blue-700 hover:scale-105 transition-all cursor-pointer'><MdOutlineChat /></button>
+        <button className='text-blue-600 hover:text-blue-700 hover:scale-105 transition-all cursor-pointer'><Link to='/chat'><MdOutlineChat /></Link></button>
         <button className='text-red-400 hover:text-red-600 hover:scale-105 transition-all cursor-pointer'><Link to='/audio'><IoCallOutline /></Link></button>
         <button className='hover:scale-110 transition-all cursor-pointer'><Link to='/video'><FcVideoCall /></Link></button>
       </div>

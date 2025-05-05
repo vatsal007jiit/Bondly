@@ -2,13 +2,15 @@ import { useState } from "react";
 import Model from "./shared/Model"
 import { FaVideo , FaVideoSlash , FaMicrophoneAlt} from "react-icons/fa";
 import { FaMicrophoneLinesSlash } from "react-icons/fa6";
-
 import { MdCallEnd } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const VideoCall = () => {
 
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
+  const navigate = useNavigate()
+
   return (
     <>
       <Model title="Video Call">
@@ -23,12 +25,12 @@ const VideoCall = () => {
       <div className="relative w-full h-screen bg-white dark:bg-gray-800 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
         <div className="w-full h-[70%] bg-black rounded-xl overflow-hidden mb-4 relative">
           <video className="w-full h-full object-cover" autoPlay playsInline muted />
-          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs dark:bg-black/75">Rahul Dravid</div>
+          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs">Rahul Dravid</div>
         </div>
         {/* Local Video - small corner */}
         <div className="absolute bottom-28 right-6 w-60 h-40 bg-black rounded-md overflow-hidden border-2 border-gray-400 shadow-md">
           <video className="w-full h-full object-cover" autoPlay playsInline muted />
-          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs dark:bg-black/75">You</div>
+          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs">You</div>
         </div>
         <div className="flex justify-center p-2 m-2 gap-2">
           <button onClick={()=>{setCamOn(!camOn)}}
@@ -40,7 +42,7 @@ const VideoCall = () => {
           { micOn ? <FaMicrophoneAlt />: <FaMicrophoneLinesSlash />}
           </button>
         
-          <button onClick={()=>{alert("Call ended")}}
+          <button onClick={()=>{navigate('/home')}}
           className="bg-red-500 text-white  cursor-pointer hover:scale-105 transition-all    w-12 h-12 rounded-full text-2xl flex justify-center items-center">
           <MdCallEnd />
           </button>

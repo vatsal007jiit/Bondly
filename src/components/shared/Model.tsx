@@ -9,7 +9,7 @@ interface ModelInterface{
 const Model: FC<ModelInterface> = ({children,title}) => {
   return (
     <div>
-      <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
+      <div className="min-h-[calc(100vh-96px)] bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
        {/* Left Sidebar */}
        <SideMenu/>
 
