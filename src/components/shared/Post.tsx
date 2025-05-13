@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
@@ -15,9 +15,15 @@ interface PostInterface{
 }
 const Post:FC<PostInterface> = ({children, name, pic, created, icon}) => {
 
+    const[liked, setLiked]=useState(false)
     const time =moment(created).fromNow();
     // const date=moment(created).format("Do MMM YY, hh:mm a");
-
+const likeValue= 55
+    const handleLike = ()=> { setLiked( prev=>!prev )}
+    const likeStatus = liked ? "Liked" : "Like";
+    const LikeBtnStyle = liked ? "primary" : "light";
+    const LikeIcon = liked ? "thumb-up-fill" : "thumb-up-line";
+    const LikeCount = liked ? `You and ${likeValue} others` : `${likeValue}`
   return (
     <>
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-5 mb-8">
@@ -39,7 +45,7 @@ const Post:FC<PostInterface> = ({children, name, pic, created, icon}) => {
             <div className='flex justify-end gap-2'>
               <div className='flex gap-1'>
                 <div className="bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500   text-white w-6 h-6 rounded-full  flex justify-center items-center"><AiFillLike /> </div>
-                <div className='text-gray-600 dark:text-white'>45K</div>
+                <div className='text-gray-600 dark:text-white'>{LikeCount}</div>
               </div>
               <div className='flex gap-1'>
                 <div className=" text-gray-500 w-6 h-6 rounded-full  flex justify-center items-center"><FaComment /> </div>
@@ -48,7 +54,7 @@ const Post:FC<PostInterface> = ({children, name, pic, created, icon}) => {
             </div>
             
             <div className='flex gap-2'>
-                <Btn icon="thumb-up-line">Like</Btn>
+                <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={handleLike}>{likeStatus}</Btn>
                 <Btn type='secondary' icon='chat-3-line'>Comment</Btn>
             </div>
           </div>

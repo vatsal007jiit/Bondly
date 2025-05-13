@@ -1,34 +1,44 @@
 import { useState } from "react";
 import logo from "../Images/Logo.png";
-import { Link } from "react-router-dom";
-import { FaEye,FaEyeSlash } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+// import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
+import HttpInterceptor from "../lib/HttpInterceptor";
+import Form, { FormDataType } from "./shared/Form";
+import Input from "./shared/Input";
+import axios from "axios";
 
 export default function Signin() {
-
-  const [showPass, setShowPass] = useState('password')
-  const [loading, setLoading] = useState(false);
   
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const logIn = async (value: FormDataType)=>{
+    try {
+      setLoading(true)
+      const {data} = await HttpInterceptor.post('/auth/login',value)
+      toast.success(data.message)
+      console.log(data.message)
+      setTimeout(()=>{
+        setLoading(false)
+        navigate('/home')
+      },2000)
+    } 
+    // catch (error: any) {
+    //   setLoading(false)
+    //   toast.error(error.response ? error.response.data.message : error.message);
+    // }
+    catch(err: unknown) {
+      setLoading(false)
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    
-    setLoading(true);
-    // TODO: plug in real auth
-    setTimeout(() => {
-      alert("Signed in!");
-      setLoading(false);
-    }, 1200);
-  };
+      if(axios.isAxiosError(err))
+        return toast.error(err.response?.data.message)
 
-  const handlePassword= (e)=>{
-    
-    if(showPass==='password')
-    {
-      setShowPass('text')
-      return;
+      if(err instanceof Error)
+        return toast.error(err.message)
+
+      toast.error("Network Error")
     }
-  setShowPass('password')
+
   }
 
   return (
@@ -42,8 +52,8 @@ export default function Signin() {
         />
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-center drop-shadow-lg max-w-xl">
-            Building Bonds, <br />
-            Bridging Relations.
+          Building Bonds, <br />
+          Bridging Relations.
         </h1>
       </div>
 
@@ -53,8 +63,66 @@ export default function Signin() {
           <h2 className="text-3xl font-semibold mb-6 text-gray-800">
             Sign in to Bondly
           </h2>
+          
+          <Form className="space-y-4" onValue={logIn}>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <Input type="email" name="email" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <Input type="password" name="password" placeholder="••••••••"/>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-xl px-4 py-3 font-medium shadow-md active:scale-[.98] transition hover:shadow-lg bg-indigo-600 text-white"
+            > {loading ? "Signing in…" : "Sign In"} </button>
+          </Form>
+          {/* Footer */}
+          <p className="mt-6 text-center text-sm text-gray-500">
+            Don’t have an account?{" "}
+            <button className="text-indigo-600 hover:underline">
+              <Link to="/signup">Create one</Link>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+
+// const [showPass, setShowPass] = useState("password");
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   try {
+  //     e.preventDefault();
+  //     setLoading(true);
+  //     const { data } = await HttpInterceptor.post("/auth/login");
+  //     toast.success(data);
+  //     setTimeout(() => {
+  //       navigate("/home");
+  //       setLoading(false);
+  //     }, 2500);
+  //   } catch (error: any) {
+  //     toast.error(error.response ? error.response.data.message : error.message);
+  //   }
+  // };
+
+  // const handlePassword = () => {
+  //   if (showPass === "password") {
+  //     setShowPass("text");
+  //     return;
+  //   }
+  //   setShowPass("password");
+  // };
+
+
+  {/* <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -92,18 +160,4 @@ export default function Signin() {
             >
               {loading ? "Signing in…" : "Sign In"}
             </button>
-          </form>
-
-          {/* Footer */}
-          <p className="mt-6 text-center text-sm text-gray-500">
-            Don’t have an account?{" "}
-            <button className="text-indigo-600 hover:underline">
-            <Link to="/signup" >Create one
-            </Link>
-            </button>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+          </form> */}
