@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import HttpInterceptor from "../lib/HttpInterceptor";
 import { toast } from "react-toastify";
+import catchErr from "../lib/CatchErr";
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -43,8 +44,8 @@ const Signup = () => {
             navigate("/login");
         }, 2500)
       
-    } catch (error: any) {
-      toast.error(error.response ? error.response.data.message : error.message);
+    } catch (error: unknown) {
+      catchErr(error)
     }
   };
 

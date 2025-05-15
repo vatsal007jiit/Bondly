@@ -23,7 +23,7 @@ const SendRequest = () => {
 
   // Shimmer/Skeleton loading card
   const ShimmerCard = () => (
-    <div className="bg-white rounded-lg p-6 flex flex-col items-center animate-pulse shadow-2xl">
+    <div className="bg-white dark:bg-gray-600  rounded-lg p-6 flex flex-col items-center animate-pulse shadow-2xl">
       <div className="w-24 h-24 rounded-full bg-gray-300 mb-4"></div>
       <div className="h-4 w-32 bg-gray-300 rounded mb-2"></div>
       <div className="h-3 w-24 bg-gray-200 rounded"></div>
