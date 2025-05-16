@@ -2,12 +2,22 @@ import React from "react";
 import { FiHome, FiBell, FiMessageSquare, FiSearch, FiUser,FiMoon, FiSun } from "react-icons/fi";
 import logo from "../Images/Logo-B2.jpg";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
+import Fetcher from "../lib/fetcher";
 
 type HeaderProps = {
     toggleDark: () => void;
   };
   
   const Header: React.FC<HeaderProps> = ({ toggleDark }) => {
+
+    const {error} = useSWR('/auth/refresh-Token', Fetcher, {
+      refreshInterval: 8 * 60 * 1000, // 8 min in ms [Access token expiry = 10 min]
+      shouldRetryOnError: false
+    })
+
+
+
     return (
       <header className="sticky top-0 z-50 bg-gray-50 dark:bg-gray-800 dark:text-white shadow-lg flex items-center justify-between px-6 py-3 font-sans">
       {/* Left: Logo and Tagline */}

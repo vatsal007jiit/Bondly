@@ -16,15 +16,17 @@ import NotFound from "./components/NotFound";
 import UserContext from "./components/UserContext";
 import { ToastContainer } from 'react-toastify';
 import Guard from "./components/Guard";
-import { useState } from "react";
+// import { useState } from "react";
 import ProfilePage from "./components/ProfilePage";
+import useSWR from "swr";
+import Fetcher from "./lib/fetcher";
 
 function App() {
 
-  const [session, setSession] = useState(null)
-
+  // const [session, setSession] = useState(null)
+  const {data: session, mutate: mutateSession} = useSWR('/auth/session', Fetcher);
   return (
-    <UserContext.Provider value={{ session, setSession}}>
+    <UserContext.Provider value={{ session, setSession : mutateSession}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />

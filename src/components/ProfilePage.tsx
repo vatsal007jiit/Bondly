@@ -6,11 +6,13 @@ import moment from "moment";
 import HttpInterceptor from "../lib/HttpInterceptor";
 import catchErr from "../lib/CatchErr";
 import { toast } from "react-toastify";
+import { mutate } from "swr";
 
 export default function ProfilePage() {
   
-  const user = useContext(UserContext)?.session
-
+  const {session , setSession} = useContext(UserContext)
+  const user = session
+  
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(user.image);
   const [fullName, setFullName] = useState(user.fullName);
@@ -49,6 +51,7 @@ export default function ProfilePage() {
 
   const downloadProfilePic = async () =>{
     try {
+
       const payload = {
         path:`profile-pic/${user.image}`,
       }
@@ -70,11 +73,14 @@ export default function ProfilePage() {
     try {
       const payload = {id:user.id , fullName, gender, dob, image: `dp_${user.id}.jpg` }
       console.log(payload);
-      uploadProfilePic(profileImage)
+      if (profileImage) {
+         await uploadProfilePic(profileImage); // Ensures upload is complete before continuing so using await
+      }
       const {data} = await HttpInterceptor.post("/auth/updateProfile",payload)
       console.log(data)
 
-      
+      await mutate("/auth/refresh-Token")
+      setSession() // This will run mutate for useSWR('/auth/session')
       toast.success("Profile Updated");
     } 
     catch (error: unknown) {

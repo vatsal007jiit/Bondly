@@ -24,7 +24,7 @@ const SideMenu = () => {
   }
   useEffect(()=>{
       downloadProfilePic()
-    },[])
+    },[user.image])
 
   return (
     <div>
