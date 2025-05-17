@@ -7,6 +7,7 @@ import HttpInterceptor from "../lib/HttpInterceptor";
 import Form, { FormDataType } from "./shared/Form";
 import Input from "./shared/Input";
 import axios from "axios";
+import { mutate } from "swr";
 
 export default function Signin() {
   
@@ -17,11 +18,14 @@ export default function Signin() {
       setLoading(true)
       const {data} = await HttpInterceptor.post('/auth/login',value)
       toast.success(data.message)
-      console.log(data.message)
+
+      await mutate("/auth/session"); // This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time
+
+
       setTimeout(()=>{
         setLoading(false)
         navigate('/home')
-      },2000)
+      },1000)
     } 
     // catch (error: any) {
     //   setLoading(false)
@@ -69,13 +73,13 @@ export default function Signin() {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
-              <Input type="email" name="email" placeholder="you@example.com" />
+              <Input type="email" name="email" placeholder="you@example.com" value="vir@mail.com" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <Input type="password" name="password" placeholder="••••••••"/>
+              <Input type="password" name="password" placeholder="••••••••" value="12345"/>
             </div>
             <button
               type="submit"

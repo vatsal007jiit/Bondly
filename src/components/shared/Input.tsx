@@ -4,9 +4,10 @@ interface InputInterface {
   name: string
   type?: string
   placeholder?: string
+  value?:string
 }
 
-const Input: FC<InputInterface> = ({name, placeholder, type="text"}) => {
+const Input: FC<InputInterface> = ({name, placeholder, value, type="text"}) => {
   return (
     <input 
         required
@@ -14,6 +15,7 @@ const Input: FC<InputInterface> = ({name, placeholder, type="text"}) => {
         placeholder={placeholder}
         name={name}
         type={type}
+        value={value}
     />
   )
 }

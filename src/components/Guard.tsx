@@ -1,36 +1,51 @@
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
 // import HttpInterceptor from "../lib/HttpInterceptor";
 import { Navigate, Outlet } from "react-router-dom";
 import UserContext from "./UserContext";
+import useSWR from "swr";
+import Fetcher from "../lib/Fetcher";
 
-const Guard = () => {
+ const Guard = () => {
+  const { session, setSession } = useContext(UserContext);
 
-  const { session } = useContext(UserContext);
-  console.log("Details",session)
-  if (session === undefined) return null; // still loading
-  if (!session) return <Navigate to="/login" replace />;
-  return <Outlet />;
+  const { data, error } = useSWR("/auth/session", Fetcher);
 
-  // const { session, setSession } = useContext(UserContext);
-  // const getSession = async () => {
-  //   try {
-  //     const { data } = await HttpInterceptor.get("/auth/session");
-  //     setSession(data);
-  //   } catch (error: any) {
-  //     setSession(false);
-  //   }
-  // }
+  useEffect(() => {
+    if (data) {
+      setSession(data);
+    }
+    if (error) {
+      setSession(false);
+    }
+  }, [data, error]);
 
-  // useEffect(() => {
-  //   getSession();
-  // }, []);
 
-  // if (session === null) return null;
+  if(session === null)
+    return <div><h1 className="text-4xl font-bold text-center dark:text-white mb-8 drop-shadow-lg">Loading session...</h1></div>;
 
-  // if (session === false) return <Navigate to="/login" replace />;
+  if(session === false)
+    <Navigate to="/login" replace />;
 
-  // return (<Outlet />);
+  return (<Outlet />);
 
 };
 
 export default Guard;
+
+// const Guard = () => {
+
+//   const { session, setSession } = useContext(UserContext);
+//   const getSession =  () => {
+//     try {
+//       const { data } = await HttpInterceptor.get("/auth/session");
+
+//       setSession(data);
+//     } 
+//     catch (error: any) {
+//       setSession(false);
+//     }
+//   }
+
+//   useEffect(() => {
+//     getSession();
+//   }, []);

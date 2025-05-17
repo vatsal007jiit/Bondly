@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import avatar from "../../Images/avatar.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
 import catchErr from "../../lib/CatchErr";
 import HttpInterceptor from "../../lib/HttpInterceptor";
+import logout from "../Logout";
 
 const SideMenu = () => {
-
+  const navigate = useNavigate()
   const user= useContext(UserContext)?.session
   const [dp,setDp] = useState(avatar)
 
@@ -23,8 +24,9 @@ const SideMenu = () => {
     }
   }
   useEffect(()=>{
+    if(user?.image)
       downloadProfilePic()
-    },[user.image])
+    },[])
 
   return (
     <div>
@@ -34,11 +36,11 @@ const SideMenu = () => {
           <img src={dp} alt="Avatar" className="h-8 w-8 rounded-full" />
           <h1 className="capitalize">{user.fullName}</h1> 
         </div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/home'>🏠 Home</Link></div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/posts'>💬 My Posts</Link></div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/friend'>👥 Friends</Link></div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/profile'>👤 Profile</Link></div>
-        <div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 rounded-lg"><Link to='/'>🚪 Logout</Link></div>
+        <Link to='/home'><div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 mb-2 rounded-lg">🏠 Home</div></Link>
+        <Link to='/posts'><div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 mb-2 rounded-lg">💬 My Posts</div></Link>
+        <Link to='/friend'><div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 mb-2 rounded-lg">👥 Friends</div></Link>
+        <Link to='/profile'><div className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 mb-2 rounded-lg">👤 Profile</div></Link>
+        <div onClick={()=>logout(navigate)} className="hover:text-indigo-500 dark:hover:text-indigo-400 transition cursor-pointer hover:bg-gray-200 hover:dark:bg-gray-700 p-1 mb-2 rounded-lg">🚪 Logout</div>
       </nav>
       
 

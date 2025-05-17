@@ -18,15 +18,21 @@ import { ToastContainer } from 'react-toastify';
 import Guard from "./components/Guard";
 // import { useState } from "react";
 import ProfilePage from "./components/ProfilePage";
-import useSWR from "swr";
-import Fetcher from "./lib/fetcher";
+// import useSWR from "swr";
+// import Fetcher from "./lib/Fetcher";
+import { useState } from "react";
+
+
 
 function App() {
 
-  // const [session, setSession] = useState(null)
-  const {data: session, mutate: mutateSession} = useSWR('/auth/session', Fetcher);
+  const [session, setSession] = useState(null) // old code with no swr [But we used it so that when we change profile page submit ,user data on sidemenu should change live]
+ 
+  // const {data: session, mutate: mutateSession} = useSWR('/auth/session', Fetcher); //This was running request on login page also and we were getting 401 error again and again so replaced with below
+
+  
   return (
-    <UserContext.Provider value={{ session, setSession : mutateSession}}>
+    <UserContext.Provider value={{ session, setSession}}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -51,7 +57,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
-        <ToastContainer position="top-center" autoClose={1500} />
+        <ToastContainer position="top-center" autoClose={1000} />
       </BrowserRouter>
     </UserContext.Provider>
   );

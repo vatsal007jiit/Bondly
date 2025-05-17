@@ -10,8 +10,7 @@ import { mutate } from "swr";
 
 export default function ProfilePage() {
   
-  const {session , setSession} = useContext(UserContext)
-  const user = session
+  const {session : user} = useContext(UserContext)
   
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(user.image);
@@ -40,7 +39,7 @@ export default function ProfilePage() {
         }
       }
       const {data} = await HttpInterceptor.post('/storage/upload', payload)
-      // console.log(data)
+     
       const response = await HttpInterceptor.put(data.url, profileImage, options)
       console.log("ETag:", response.headers.etag);
     } 
@@ -56,6 +55,7 @@ export default function ProfilePage() {
         path:`profile-pic/${user.image}`,
       }
       const {data} = await HttpInterceptor.post("/storage/download",payload)
+      
       setImagePreview(data.url)
       // console.log('DP Link is:', data)
     } 
@@ -80,7 +80,8 @@ export default function ProfilePage() {
       console.log(data)
 
       await mutate("/auth/refresh-Token")
-      setSession() // This will run mutate for useSWR('/auth/session')
+      await mutate("/auth/session")
+    
       toast.success("Profile Updated");
     } 
     catch (error: unknown) {
