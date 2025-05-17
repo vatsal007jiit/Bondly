@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FiHome, FiLogOut, FiMessageSquare, FiSearch, FiUser,FiMoon, FiSun } from "react-icons/fi";
 import logo from "../Images/Logo-B2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import Fetcher from "../lib/Fetcher";
 import logout from "./Logout";
+import UserContext from "./UserContext";
 
 type HeaderProps = {
     toggleDark: () => void;
@@ -13,6 +14,7 @@ type HeaderProps = {
   const Header: React.FC<HeaderProps> = ({ toggleDark }) => {
 
     const navigate =useNavigate()
+    const { setSession } = useContext(UserContext);
 
     useSWR('/auth/refresh-Token', Fetcher, {
       refreshInterval: 8 * 60 * 1000, // 8 min in ms [Access token expiry = 10 min]
@@ -47,7 +49,7 @@ type HeaderProps = {
         <Link to='/home'><FiHome className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer" title="Home" /></Link>
         <FiMessageSquare className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer" title="Messages" />
         <Link to='/profile'><FiUser className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer" title="Profile" /></Link>
-        <button onClick={()=>logout(navigate)}><FiLogOut className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer" title="Logout" /></button>
+        <button onClick={()=>logout(navigate, setSession)}><FiLogOut className="hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer" title="Logout" /></button>
         <button onClick={toggleDark} title="Toggle Theme">
           <FiSun className="hidden dark:inline-block hover:text-yellow-400" />
           <FiMoon className="inline-block dark:hidden hover:text-indigo-600" />

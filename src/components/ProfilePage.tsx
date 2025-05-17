@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import SideMenu from "./shared/SideMenu";
-import avatar from "./../Images/avatar.webp";
+import avatarMale from "./../Images/avatar.webp";
+import avatarFem from "./../Images/avatar-fem.png";
 import UserContext from "./UserContext";
 import moment from "moment";
 import HttpInterceptor from "../lib/HttpInterceptor";
@@ -11,7 +12,7 @@ import { mutate } from "swr";
 export default function ProfilePage() {
   
   const {session : user} = useContext(UserContext)
-  
+  const avatar = (user.gender==='Male') ? avatarMale : avatarFem
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(user.image);
   const [fullName, setFullName] = useState(user.fullName);
@@ -54,9 +55,12 @@ export default function ProfilePage() {
       const payload = {
         path:`profile-pic/${user.image}`,
       }
-      const {data} = await HttpInterceptor.post("/storage/download",payload)
+      if(user.image)
+      {
+        const {data} = await HttpInterceptor.post("/storage/download",payload)
+        setImagePreview(data.url)
+      }
       
-      setImagePreview(data.url)
       // console.log('DP Link is:', data)
     } 
     catch (error: unknown) {
@@ -138,9 +142,9 @@ export default function ProfilePage() {
               onChange={(e) => setGender(e.target.value)}
               className="w-full px-4 py-2 font-semibold  rounded-xl bg-gray-200 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </select>
           </div>
           {/* Date of Birth */}

@@ -6,8 +6,9 @@ import { toast } from "react-toastify";
 import HttpInterceptor from "../lib/HttpInterceptor";
 import Form, { FormDataType } from "./shared/Form";
 import Input from "./shared/Input";
-import axios from "axios";
-import { mutate } from "swr";
+
+// import { mutate } from "swr";
+import catchErr from "../lib/CatchErr";
 
 export default function Signin() {
   
@@ -19,28 +20,14 @@ export default function Signin() {
       const {data} = await HttpInterceptor.post('/auth/login',value)
       toast.success(data.message)
 
-      await mutate("/auth/session"); // This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time
-
-
-      setTimeout(()=>{
-        setLoading(false)
-        navigate('/home')
-      },1000)
-    } 
-    // catch (error: any) {
-    //   setLoading(false)
-    //   toast.error(error.response ? error.response.data.message : error.message);
-    // }
-    catch(err: unknown) {
+      // await mutate("/auth/session"); // [Not needed ...]This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time . 
       setLoading(false)
+      navigate('/home')
 
-      if(axios.isAxiosError(err))
-        return toast.error(err.response?.data.message)
-
-      if(err instanceof Error)
-        return toast.error(err.message)
-
-      toast.error("Network Error")
+    } 
+  
+    catch(err: unknown) {
+     catchErr(err)
     }
 
   }
@@ -73,7 +60,7 @@ export default function Signin() {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
-              <Input type="email" name="email" placeholder="you@example.com" value="vir@mail.com" />
+              <Input type="email" name="email" placeholder="you@example.com"  />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

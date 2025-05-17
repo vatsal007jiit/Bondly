@@ -3,13 +3,20 @@ import HttpInterceptor from "../lib/HttpInterceptor";
 import catchErr from "../lib/CatchErr";
 import { mutate } from "swr";
 
-const logout = async (navigate: Function) => {
+
+const logout = async (navigate: Function,setSession: Function) => {
+
   try {
+
     await HttpInterceptor.post("/auth/logout");
-    await mutate("/auth/session", null); // clear session in SWR
+
+    setSession(null)
+    mutate(() => true, undefined, { revalidate: false }); //  Clear SWR cache globally
+
     toast.success("Logout Successful");
     navigate("/login");
-  } catch (error) {
+  } 
+  catch (error) {
     catchErr(error);
   }
 };
