@@ -3,10 +3,14 @@ import { PhoneOff } from "lucide-react";
 import { FaMicrophoneAlt} from "react-icons/fa";
 import { FaMicrophoneLinesSlash } from "react-icons/fa6";
 import Model from "./shared/Model";
-import avatar from "../Images/avatar.webp"
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 const AudioCall: React.FC = () => {
+
+  const location = useLocation()
+  const { name, avatar } = location.state
+
   const [micOn, setMicOn] = useState(true);
   const [seconds, setSeconds] = useState(0);
   const navigate = useNavigate()
@@ -29,7 +33,7 @@ const AudioCall: React.FC = () => {
           {/* Caller Info */}
           <div className="text-center mb-8 ">
             <h2 className="text-3xl font-bold mb-2">Calling</h2>
-            <h2 className="text-2xl font-semibold mb-2">Rahul Dravid</h2>
+            <h2 className="text-2xl capitalize font-semibold mb-2">{name}</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Audio Call • {formatTime(seconds)}
             </p>

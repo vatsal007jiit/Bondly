@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
+import HttpInterceptor from '../lib/HttpInterceptor';
 
 const SendRequest = () => {
   const [users, setUsers] = useState([]);
@@ -12,14 +12,19 @@ const SendRequest = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await axios.get('https://randomuser.me/api/?results=10');
-      setUsers(data.results);
-      setLoading(false); // after fetching
+      const { data } = await HttpInterceptor.get('/friend/suggestion')
+      if (data)
+      {
+        setUsers(data);
+        setLoading(false); 
+      }
     } catch (error) {
       console.error("Failed to fetch users", error);
       setLoading(false);
     }
   };
+
+
 
   // Shimmer/Skeleton loading card
   const ShimmerCard = () => (
@@ -42,8 +47,14 @@ const SendRequest = () => {
         {
           loading 
           ? [...Array(8)].map((_, idx) => <ShimmerCard key={idx} />) 
-          : users.map((usr, index) => (
-              <UserCard key={index} name={usr.name.first} email={usr.email} avatar={usr.picture.large} Btn1='Add' Btn2='Remove'/>
+          : users.map((usr : any) => (
+              <UserCard 
+              key={usr._id} 
+              name={usr.fullName} 
+              email={usr.email} 
+              avatar={usr.image} 
+              gender={usr.gender} 
+              Btn1='Add Friend' icon='user-add-line'/>
             ))
         }
       </div>

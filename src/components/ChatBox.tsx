@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Model from "./shared/Model";
-import avatar from "../Images/avatar.webp"
 import Btn from "./shared/Btn";
 import { IoIosCloseCircle } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GrAttachment } from "react-icons/gr";
 
 type Message = {
@@ -13,6 +12,10 @@ type Message = {
 };
 
 const ChatBox: React.FC = () => {
+
+  const location = useLocation()
+  const { name, avatar } = location.state
+
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, text: "Hi there!", sender: "them" },
     { id: 2, text: "Hello! How can I help you?", sender: "me" },
@@ -36,7 +39,7 @@ const ChatBox: React.FC = () => {
           {/* Header */}
           <div className="bg-gray-100 flex items-center gap-1 dark:bg-gray-800 px-4 py-3 text-lg font-semibold text-gray-900 dark:text-white relative">
              <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 " />
-             <h1 className="capitalize">Rahul Dravid</h1> 
+             <h1 className="capitalize">{name}</h1> 
              <button
                 onClick={()=>{navigate('/home')}} 
                 className="absolute top-5 right-5 text-2xl text-gray-400 hover:text-gray-600 hover:dark:text-gray-200 transition-all cursor-pointer "><IoIosCloseCircle />

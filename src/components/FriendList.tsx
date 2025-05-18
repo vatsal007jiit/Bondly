@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
+import HttpInterceptor from '../lib/HttpInterceptor';
 
 const FriendList = () => {
   const [users, setUsers] = useState([]);
@@ -12,9 +12,13 @@ const FriendList = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await axios.get('https://randomuser.me/api/?results=10');
-      setUsers(data.results);
-      setLoading(false); // after fetching
+      const { data } = await HttpInterceptor.get('/friend/fetch')
+      console.log(data.friends)
+       if (data.friends)
+      {
+        setUsers(data.friends);
+        setLoading(false); 
+      }
     } catch (error) {
       console.error("Failed to fetch users", error);
       setLoading(false);
@@ -42,8 +46,14 @@ const FriendList = () => {
         {
           loading 
           ? [...Array(8)].map((_, index) => <ShimmerCard key={index} />) 
-          : users.map((usr, index) => (
-              <UserCard key={index} name={usr.name.first} email={usr.email} avatar={usr.picture.large} Btn1='Message' Btn2='Unfriend'/>
+          : users.map((usr :any) => (
+              <UserCard 
+              key={usr._id} 
+              name={usr.fullName} 
+              email={usr.email} 
+              avatar={usr.image} 
+              gender={usr.gender} 
+              Btn1='Message' Btn2='Unfriend'/>
             ))
         }
       </div>

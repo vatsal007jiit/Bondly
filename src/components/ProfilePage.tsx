@@ -8,6 +8,8 @@ import HttpInterceptor from "../lib/HttpInterceptor";
 import catchErr from "../lib/CatchErr";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
+import { uploadProfilePic } from "../lib/Upload_Dp";
+import { downloadProfilePic } from "../lib/Download_Dp";
 
 export default function ProfilePage() {
   
@@ -27,49 +29,14 @@ export default function ProfilePage() {
     }
   };
 
-  const uploadProfilePic = async (profileImage: any)=>{
-    try {
-      const payload = {
-        path:`profile-pic/dp_${user.id}.jpg`,
-        type:profileImage?.type
-      }
-
-      const options = {
-        headers:{
-          'Content-Type': profileImage?.type
-        }
-      }
-      const {data} = await HttpInterceptor.post('/storage/upload', payload)
-     
-      const response = await HttpInterceptor.put(data.url, profileImage, options)
-      console.log("ETag:", response.headers.etag);
-    } 
-    catch (error: unknown) {
-      catchErr(error)
-    }
-  }
-
-  const downloadProfilePic = async () =>{
-    try {
-
-      const payload = {
-        path:`profile-pic/${user.image}`,
-      }
-      if(user.image)
-      {
-        const {data} = await HttpInterceptor.post("/storage/download",payload)
-        setImagePreview(data.url)
-      }
-      
-      // console.log('DP Link is:', data)
-    } 
-    catch (error: unknown) {
-      catchErr(error)
-    }
+  const donwload_dp = async() =>{
+    const url=await downloadProfilePic(user.image)
+    setImagePreview(url)
   }
 
   useEffect(()=>{
-    downloadProfilePic()
+    if(user?.image)
+      donwload_dp()
   },[])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,7 +45,7 @@ export default function ProfilePage() {
       const payload = {id:user.id , fullName, gender, dob, image: `dp_${user.id}.jpg` }
       console.log(payload);
       if (profileImage) {
-         await uploadProfilePic(profileImage); // Ensures upload is complete before continuing so using await
+         await uploadProfilePic(profileImage, user.id); // Ensures upload is complete before continuing so using await
       }
       const {data} = await HttpInterceptor.post("/auth/updateProfile",payload)
       console.log(data)

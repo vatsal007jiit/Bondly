@@ -3,9 +3,13 @@ import Model from "./shared/Model"
 import { FaVideo , FaVideoSlash , FaMicrophoneAlt} from "react-icons/fa";
 import { FaMicrophoneLinesSlash } from "react-icons/fa6";
 import { MdCallEnd } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const VideoCall = () => {
+
+  const location = useLocation()
+  const { name} = location.state
+
 
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
@@ -25,7 +29,7 @@ const VideoCall = () => {
       <div className="relative w-full h-screen bg-white dark:bg-gray-800 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
         <div className="w-full h-[70%] bg-black rounded-xl overflow-hidden mb-4 relative">
           <video className="w-full h-full object-cover" autoPlay playsInline muted />
-          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs">Rahul Dravid</div>
+          <div className="px-2 py-1 rounded-lg absolute bottom-5 left-5 bg-white/25 text-white text-xs capitalize">{name}</div>
         </div>
         {/* Local Video - small corner */}
         <div className="absolute bottom-28 right-6 w-60 h-40 bg-black rounded-md overflow-hidden border-2 border-gray-400 shadow-md">

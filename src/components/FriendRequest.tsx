@@ -42,8 +42,13 @@ const FriendRequest = () => {
         {
           loading 
           ? [...Array(8)].map((_, idx) => <ShimmerCard key={idx} />) 
-          : users.map((usr, index) => (
-            <UserCard key={index} name={usr.name.first} email={usr.email} avatar={usr.picture.large} Btn1='Confirm' Btn2='Delete'/>
+          : users.map((usr: any) => (
+            <UserCard key={usr.id} 
+            name={usr.fullName} 
+            email={usr.email} 
+            avatar={usr.image} 
+            gender={usr.gender}
+            Btn1='Confirm' Btn2='Delete'/>
             ))
         }
       </div>

@@ -4,9 +4,12 @@ import Btn from "./shared/Btn";
 import OnlineCard from "./shared/OnlineCard";
 import SideMenu from "./shared/SideMenu";
 import Post from "./shared/Post";
+import useSWR from "swr";
+import Fetcher from "../lib/Fetcher";
+import {Skeleton} from "antd"
 
 const Home: React.FC = () => {
-  
+  const {data , error, isLoading} =useSWR('/friend/fetch',Fetcher)
 
   return (
     <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
@@ -38,8 +41,9 @@ const Home: React.FC = () => {
           <div>
             <h2 className="text-2xl my-4 font-bold bg-gradient-to-r from-blue-800 to-pink-500 bg-clip-text text-transparent dark:text-indigo-400 border-b-1 border-indigo-200">Contacts</h2>
             <ul className="space-y-2 text-gray-700 dark:text-gray-200 text-sm">
-              {[...Array(25)].map((_, index) => (
-                <OnlineCard key={index} name='Rahul Dravid' status={index%2==0 ? "online" : "offline"}/>
+              {isLoading && <Skeleton active/>}
+              {data?.friends && (data?.friends).map((fd: any, index: number) => (
+                <OnlineCard key={fd._id} name={fd.fullName} avatar={fd.image} gender={fd.gender} status={index%2==0 ? "online" : "offline"}/>
               ))}
             </ul>
           </div>
