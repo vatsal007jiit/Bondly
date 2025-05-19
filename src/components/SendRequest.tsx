@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
 import HttpInterceptor from '../lib/HttpInterceptor';
+import dp from '../lib/DP';
 
 const SendRequest = () => {
   const [users, setUsers] = useState([]);
@@ -52,8 +53,7 @@ const SendRequest = () => {
               key={usr._id} 
               name={usr.fullName} 
               email={usr.email} 
-              avatar={usr.image} 
-              gender={usr.gender} 
+              avatar={dp(usr.image,usr.gender)} 
               Btn1='Add Friend' icon='user-add-line'/>
             ))
         }

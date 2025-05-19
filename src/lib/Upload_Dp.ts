@@ -1,11 +1,14 @@
 import catchErr from "./CatchErr"
 import HttpInterceptor from "./HttpInterceptor"
 
-export const uploadProfilePic = async (profileImage: any, id: number)=>{
+type ACLType = "private" | "public-read"
+
+export const uploadProfilePic = async (profileImage: any, id: number, acl: ACLType = 'private')=>{
     try {
       const payload = {
         path:`profile-pic/dp_${id}.jpg`,
-        type:profileImage?.type
+        type:profileImage?.type,
+        acl:acl
       }
 
       const options = {

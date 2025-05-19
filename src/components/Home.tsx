@@ -7,10 +7,11 @@ import Post from "./shared/Post";
 import useSWR from "swr";
 import Fetcher from "../lib/Fetcher";
 import {Skeleton} from "antd"
+import dp from "../lib/DP";
 
 const Home: React.FC = () => {
-  const {data , error, isLoading} =useSWR('/friend/fetch',Fetcher)
-
+  const {data, isLoading} =useSWR('/friend/fetch',Fetcher)
+  
   return (
     <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
     {/* Left Sidebar */}
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
             <ul className="space-y-2 text-gray-700 dark:text-gray-200 text-sm">
               {isLoading && <Skeleton active/>}
               {data?.friends && (data?.friends).map((fd: any, index: number) => (
-                <OnlineCard key={fd._id} name={fd.fullName} avatar={fd.image} gender={fd.gender} status={index%2==0 ? "online" : "offline"}/>
+                <OnlineCard key={fd._id} name={fd.fullName} avatar={dp(fd.image,fd.gender)} status={index%2==0 ? "online" : "offline"}/>
               ))}
             </ul>
           </div>

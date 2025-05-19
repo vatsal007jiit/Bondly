@@ -1,27 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import avatar from "../../Images/avatar.webp";
-import avatarFem from "../../Images/avatar-fem.png";
+import { useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
 import logout from "../Logout";
-import { downloadProfilePic } from "../../lib/Download_Dp";
+import dp from "../../lib/DP";
+// import { downloadProfilePic } from "../../lib/Download_Dp";
 
 const SideMenu = () => {
   const navigate = useNavigate();
   const { session: user, setSession } = useContext(UserContext);
-  const [imagePreview, setImagePreview] = useState(
-    user.gender === "Male" ? avatar : avatarFem
-  );
-
-  const donwload_dp = async () => {
-    const url = await downloadProfilePic(user.image);
-    setImagePreview(url);
-  };
-
-  useEffect(() => {
-    if(user?.image)
-      donwload_dp()
-  }, []);
+  
+  
+  // const [imagePreview, setImagePreview] = useState(
+  //   user.gender === "Male" ? avatarMale : avatarFem
+  // );
+  // const donwload_dp = async () => {
+  //   const url = await downloadProfilePic(user.image);
+  //   setImagePreview(url);
+  // };
+  // useEffect(() => {
+  //   if(user?.image)
+  //     donwload_dp()
+  // }, []);
 
   return (
     <div>
@@ -29,7 +28,8 @@ const SideMenu = () => {
         <nav className="text-lg space-y-4">
           <div className="flex items-center gap-1 mt-2 p-1  ">
             <img
-              src={imagePreview}
+              // src={imagePreview}
+              src = {dp(user.image,user.gender)}
               alt="Avatar"
               className="h-16 w-16 rounded-full"
             />

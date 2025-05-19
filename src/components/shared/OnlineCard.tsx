@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import avatarMale from "../../Images/avatar.webp";
-import avatarFem from "../../Images/avatar-fem.png";
+import React from 'react'
 import { MdOutlineChat } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
-import { downloadProfilePic } from '../../lib/Download_Dp';
+// import { downloadProfilePic } from '../../lib/Download_Dp';
 
 interface OnlineInterface {
   name: string,
   avatar: string,
-  gender: string,
   status: "online" | "offline"
 }
 
-const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, gender, status }) => {
+const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, status }) => {
 
   const navigate = useNavigate()
 
@@ -22,7 +19,7 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, gender, status })
     navigate('/chat', {
       state: {
         name: name,
-        avatar: imagePreview
+        avatar
       },
     });
   };
@@ -37,31 +34,31 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, gender, status })
     navigate('/audio', {
       state: {
         name: name,
-        avatar: imagePreview
+        avatar
       },
     });
   };
 
-  const [imagePreview, setImagePreview] = useState(
-    gender === "Male" ? avatarMale : avatarFem
-  );
+  // const [imagePreview, setImagePreview] = useState(
+  //   gender === "Male" ? avatarMale : avatarFem
+  // );
 
-  const donwload_dp = async () => {
-    const url = await downloadProfilePic(avatar);
-    setImagePreview(url);
-  };
+  // const donwload_dp = async () => {
+  //   const url = await downloadProfilePic(avatar);
+  //   setImagePreview(url);
+  // };
 
-  useEffect(() => {
-    if(avatar)
-      donwload_dp()
-  }, []);
+  // useEffect(() => {
+  //   if(avatar)
+  //     donwload_dp()
+  // }, []);
 
   return (
     <div className='flex justify-between items-center my-6 bg-blue-300 dark:bg-gray-700 rounded-lg p-2'>
       {/* Left section */}
       <div className='flex gap-2 items-center'>
         <div className="relative">
-          <img src={imagePreview} alt="Avatar" className="h-10 w-10 rounded-full" />
+          <img src={avatar} alt="Avatar" className="h-10 w-10 rounded-full" />
           <span
             className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white dark:border-gray-700 ${
               status === "online" ? "bg-green-500" : "bg-red-500"

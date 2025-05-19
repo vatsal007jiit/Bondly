@@ -29,23 +29,22 @@ export default function ProfilePage() {
     }
   };
 
-  const donwload_dp = async() =>{
-    const url=await downloadProfilePic(user.image)
-    setImagePreview(url)
-  }
-
-  useEffect(()=>{
-    if(user?.image)
-      donwload_dp()
-  },[])
+  // const donwload_dp = async() =>{
+  //   const url=await downloadProfilePic(user.image)
+  //   setImagePreview(url)
+  // }
+  // useEffect(()=>{
+  //   if(user?.image)
+  //     donwload_dp()
+  // },[])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const payload = {id:user.id , fullName, gender, dob, image: `dp_${user.id}.jpg` }
+      const payload = {id:user.id , fullName, gender, dob, image: `https://bondly-network.s3.ap-south-1.amazonaws.com/profile-pic/dp_${user.id}.jpg` }
       console.log(payload);
       if (profileImage) {
-         await uploadProfilePic(profileImage, user.id); // Ensures upload is complete before continuing so using await
+         await uploadProfilePic(profileImage, user.id, "public-read"); // Ensures upload is complete before continuing so using await
       }
       const {data} = await HttpInterceptor.post("/auth/updateProfile",payload)
       console.log(data)
