@@ -38,6 +38,7 @@ const FriendList = () => {
       }
       const {data} = await HttpInterceptor.post('/friend/unfriend',payload)
       toast.success(data.message)
+      fetchData()
 
     } catch (error: unknown) {
       catchErr(error)

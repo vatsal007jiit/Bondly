@@ -9,10 +9,11 @@ interface UserInterface{
   click1?: (id: string)=> void
   Btn2?: string;
   click2?: (id: string)=> void
-  icon?: string
+  icon1?: string
+  icon2?: string
 }
 
-const UserCard: FC<UserInterface> = ({name, email, dob, avatar, Btn1, click1, Btn2, click2, icon}) => {
+const UserCard: FC<UserInterface> = ({name, email, dob, avatar, Btn1, click1, Btn2, click2, icon1, icon2}) => {
 
   
 
@@ -38,8 +39,8 @@ const UserCard: FC<UserInterface> = ({name, email, dob, avatar, Btn1, click1, Bt
                 </div>}
 
                 <div className="flex gap-2 mt-4">
-                  {Btn1 && <Btn icon={icon} onclick={click1}>{Btn1}</Btn>}
-                  {Btn2 && <Btn onclick={click2} type='secondary'>{Btn2}</Btn>}
+                  {Btn1 && <Btn icon={icon1} onclick={click1}>{Btn1}</Btn>}
+                  {Btn2 && <Btn icon={icon2} onclick={click2} type='secondary'>{Btn2}</Btn>}
                 </div>
               </div>
     </>

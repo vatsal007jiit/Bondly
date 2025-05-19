@@ -35,6 +35,7 @@ const SendRequest = () => {
       }
       const {data} =await HttpInterceptor.post('/friend/add',payload)
       toast.success(data.message)
+      fetchData()
     } 
     catch (error: unknown) {
       catchErr(error)  
@@ -71,7 +72,7 @@ const SendRequest = () => {
                   name={usr.fullName} 
                   email={usr.email} 
                   avatar={dp(usr.image,usr.gender)} 
-                  Btn1='Add Friend' click1={()=>sendRequest(usr._id)} icon='user-add-line'/>
+                  Btn1='Add Friend' click1={()=>sendRequest(usr._id)} icon1='user-add-line'/>
               ))
              ) 
         }

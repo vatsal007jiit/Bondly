@@ -36,6 +36,7 @@ const FriendRequest = () => {
       }
       const {data} = await HttpInterceptor.post('/friend/accept',payload)
       toast.success(data.message)
+      fetchData()
 
     } catch (error: unknown) {
       catchErr(error)
@@ -49,6 +50,7 @@ const FriendRequest = () => {
       }
       const {data} = await HttpInterceptor.post('/friend/reject',payload)
       toast.success(data.message)
+      fetchData()
 
     } catch (error: unknown) {
       catchErr(error)
