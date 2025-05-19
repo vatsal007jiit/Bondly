@@ -30,10 +30,7 @@ const Friend_SentReq = () => {
 
   const cancelRequest = async (id: string) => {
     try {
-      const payload = {
-        id,
-      };
-      const { data } = await HttpInterceptor.post("/friend/cancel", payload);
+      const { data } = await HttpInterceptor.delete(`/friend/cancel/${id}`);
       toast.success(data.message);
       fetchData()
     } catch (error: unknown) {

@@ -34,7 +34,7 @@ const FriendRequest = () => {
       const payload ={
         id
       }
-      const {data} = await HttpInterceptor.post('/friend/accept',payload)
+      const {data} = await HttpInterceptor.put('/friend/accept',payload)
       toast.success(data.message)
       fetchData()
 
@@ -48,7 +48,7 @@ const FriendRequest = () => {
       const payload ={
         id
       }
-      const {data} = await HttpInterceptor.post('/friend/reject',payload)
+      const {data} = await HttpInterceptor.put('/friend/reject',payload)
       toast.success(data.message)
       fetchData()
 

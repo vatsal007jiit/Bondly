@@ -33,10 +33,8 @@ const FriendList = () => {
 
    const unFriend = async (id: string) =>{
     try {
-      const payload ={
-        id
-      }
-      const {data} = await HttpInterceptor.post('/friend/unfriend',payload)
+     
+      const {data} = await HttpInterceptor.delete(`/friend/unfriend/${id}`)
       toast.success(data.message)
       fetchData()
 
