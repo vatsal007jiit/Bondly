@@ -4,9 +4,9 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Layout from "./components/Layout";
 import FriendList from "./components/FriendList";
-import Friends from "./components/Friends";
+import Friends from "./components/Friends_Nav";
 import FriendRequest from "./components/FriendRequest";
-import SendRequest from "./components/SendRequest";
+import SendRequest from "./components/Friend_Suggestion";
 import VideoCall from "./components/VideoCall";
 import AudioCall from "./components/AudioCall";
 import ChatBox from "./components/ChatBox";
@@ -18,6 +18,8 @@ import { ToastContainer } from 'react-toastify';
 import Guard from "./components/Guard";
 import { useState } from "react";
 import ProfilePage from "./components/ProfilePage";
+import Friend_SentReq from "./components/Friend_SentReq";
+import Friend_Bday from "./components/Friend_Bday";
 // import useSWR from "swr";
 // import Fetcher from "./lib/Fetcher";
 
@@ -41,6 +43,8 @@ function App() {
                 <Route path="friendList" element={<FriendList />} />
                 <Route path="friendRequest" element={<FriendRequest />} />
                 <Route path="sendRequest" element={<SendRequest />} />
+                <Route path="sent" element={<Friend_SentReq />} />
+                <Route path="bday" element={<Friend_Bday />} />
               </Route>
               <Route path="/profile" element={<ProfilePage/>} />
               <Route path="/video" element={<VideoCall />} />

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
 import HttpInterceptor from '../lib/HttpInterceptor';
-import { toast } from 'react-toastify';
-import catchErr from '../lib/CatchErr';
 import dp from '../lib/DP';
 import Empty from './shared/Empty';
 
-const FriendRequest = () => {
-   const [users, setUsers] = useState([]);
+const Friend_SentReq = () => {
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true); // <- new loading state
 
   useEffect(() => {
@@ -16,8 +14,8 @@ const FriendRequest = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await HttpInterceptor.get('/friend/requests')
-      console.log(data.friends)
+      const { data } = await HttpInterceptor.get('/friend/sent')
+      console.log(data.sentRequest)
        if (data.friends)
       {
         setUsers(data.friends);
@@ -28,33 +26,6 @@ const FriendRequest = () => {
       setLoading(false);
     }
   };
-
-  const acceptRequest = async (id: string) =>{
-    try {
-      const payload ={
-        id
-      }
-      const {data} = await HttpInterceptor.post('/friend/accept',payload)
-      toast.success(data.message)
-
-    } catch (error: unknown) {
-      catchErr(error)
-    }
-  }
-
-  const rejectRequest = async (id: string) =>{
-    try {
-      const payload ={
-        id
-      }
-      const {data} = await HttpInterceptor.post('/friend/reject',payload)
-      toast.success(data.message)
-
-    } catch (error: unknown) {
-      catchErr(error)
-    }
-  }
-
   // Shimmer/Skeleton loading card
   const ShimmerCard = () => (
     <div className="bg-white dark:bg-gray-600  rounded-lg p-6 flex flex-col items-center animate-pulse shadow-2xl">
@@ -76,20 +47,19 @@ const FriendRequest = () => {
         {
           loading 
           ? [...Array(8)].map((_, idx) => <ShimmerCard key={idx} />) 
-          : (users.length === 0 ? (<div className="flex justify-center items-center h-full"> <Empty/> </div>) : 
+          : (users.length === 0 ? <Empty/> : 
               users.map((usr: any) => (
                 <UserCard key={usr._id} 
                 name={usr.fullName} 
                 email={usr.email} 
                 avatar={dp(usr.image,usr.gender)} 
-                Btn1='Confirm' click1={()=>acceptRequest(usr._id)} 
-                Btn2='Delete' click2={()=>rejectRequest(usr._id)} />
-                ))
-            )
+                Btn1='Request Sent'/>
+              ))
+          )  
         }
       </div>
     </>
   );
 };
 
-export default FriendRequest;
+export default Friend_SentReq;

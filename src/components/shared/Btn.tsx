@@ -8,7 +8,7 @@ const buttonModel = {
 interface ButtonInterface {
     children?: string;
     type?: "primary" | "secondary" | "light";
-    onclick?: ()=>void
+    onclick?: (() => void) | ((...args: any[]) => void);
     icon?: string
 }
 

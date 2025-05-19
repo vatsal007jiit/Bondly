@@ -6,6 +6,20 @@ const Friends: React.FC = () => {
       {/* Left Sidebar */}
       <aside className="fixed top-22 left-0 h-[calc(100vh-4rem)] w-1/5 overflow-y-auto scrollbar-hidden font-semibold hidden lg:flex flex-col gap-6 p-6 bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 shadow-lg border-r border-gray-400 dark:border-gray-700">
         <nav className="text-lg space-y-4">
+          
+          <NavLink
+            to="/home"
+            className={({ isActive }) =>
+              `block p-1 rounded-lg transition cursor-pointer ${
+                isActive
+                  ? "bg-white text-indigo-600 dark:bg-gray-700"
+                  : "hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`
+            }
+          >
+            🏠 Home
+          </NavLink>
+
           <NavLink
             to="/friend/friendList"
             className={({ isActive }) =>
@@ -43,6 +57,30 @@ const Friends: React.FC = () => {
             }
           >
             💬 Suggestions
+          </NavLink>
+          <NavLink
+            to="/friend/sent"
+            className={({ isActive }) =>
+              `block p-1 rounded-lg transition cursor-pointer ${
+                isActive
+                  ? "bg-white text-indigo-600 dark:bg-gray-700"
+                  : "hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`
+            }
+          >
+            ⏳ Sent Requests
+          </NavLink>
+          <NavLink
+            to="/friend/bday"
+            className={({ isActive }) =>
+              `block p-1 rounded-lg transition cursor-pointer ${
+                isActive
+                  ? "bg-white text-indigo-600 dark:bg-gray-700"
+                  : "hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`
+            }
+          >
+            🎂 Birthdays
           </NavLink>
         </nav>
       </aside>

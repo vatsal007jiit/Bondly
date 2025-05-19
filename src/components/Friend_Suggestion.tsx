@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
 import HttpInterceptor from '../lib/HttpInterceptor';
 import dp from '../lib/DP';
+import { toast } from 'react-toastify';
+import catchErr from '../lib/CatchErr';
+import Empty from './shared/Empty';
 
 const SendRequest = () => {
   const [users, setUsers] = useState([]);
@@ -14,9 +17,9 @@ const SendRequest = () => {
   const fetchData = async () => {
     try {
       const { data } = await HttpInterceptor.get('/friend/suggestion')
-      if (data)
+      if (data.friends)
       {
-        setUsers(data);
+        setUsers(data.friends);
         setLoading(false); 
       }
     } catch (error) {
@@ -24,6 +27,19 @@ const SendRequest = () => {
       setLoading(false);
     }
   };
+
+  const sendRequest = async (id: string)=>{
+    try {
+      const payload = {
+        friend: id
+      }
+      const {data} =await HttpInterceptor.post('/friend/add',payload)
+      toast.success(data.message)
+    } 
+    catch (error: unknown) {
+      catchErr(error)  
+    }
+  }
 
 
 
@@ -48,14 +64,16 @@ const SendRequest = () => {
         {
           loading 
           ? [...Array(8)].map((_, idx) => <ShimmerCard key={idx} />) 
-          : users.map((usr : any) => (
-              <UserCard 
-              key={usr._id} 
-              name={usr.fullName} 
-              email={usr.email} 
-              avatar={dp(usr.image,usr.gender)} 
-              Btn1='Add Friend' icon='user-add-line'/>
-            ))
+          : (users.length === 0 ? <Empty/> : 
+              users.map((usr : any) => (
+                  <UserCard 
+                  key={usr._id} 
+                  name={usr.fullName} 
+                  email={usr.email} 
+                  avatar={dp(usr.image,usr.gender)} 
+                  Btn1='Add Friend' click1={()=>sendRequest(usr._id)} icon='user-add-line'/>
+              ))
+             ) 
         }
       </div>
     </>

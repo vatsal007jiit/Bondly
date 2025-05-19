@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import UserCard from './shared/UserCard';
 import HttpInterceptor from '../lib/HttpInterceptor';
+import dp from '../lib/DP';
+import Empty from './shared/Empty';
+import { toast } from 'react-toastify';
+import catchErr from '../lib/CatchErr';
+import { useNavigate } from 'react-router-dom';
 
 const FriendList = () => {
+  const navigate =useNavigate()
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true); // <- new loading state
 
@@ -25,6 +31,29 @@ const FriendList = () => {
     }
   };
 
+   const unFriend = async (id: string) =>{
+    try {
+      const payload ={
+        id
+      }
+      const {data} = await HttpInterceptor.post('/friend/unfriend',payload)
+      toast.success(data.message)
+
+    } catch (error: unknown) {
+      catchErr(error)
+    }
+  }
+
+   const sendMessage = (userName : string, avatar: string) =>{
+    navigate('/chat', {
+      state: {
+        name :userName,
+        avatar
+      },
+    });
+   }
+
+
   // Shimmer/Skeleton loading card
   const ShimmerCard = () => (
     <div className="bg-white dark:bg-gray-600 rounded-lg p-6 flex flex-col items-center animate-pulse shadow-2xl">
@@ -46,15 +75,17 @@ const FriendList = () => {
         {
           loading 
           ? [...Array(8)].map((_, index) => <ShimmerCard key={index} />) 
-          : users.map((usr :any) => (
-              <UserCard 
-              key={usr._id} 
-              name={usr.fullName} 
-              email={usr.email} 
-              avatar={usr.image} 
-              gender={usr.gender} 
-              Btn1='Message' Btn2='Unfriend'/>
-            ))
+          : (users.length === 0 ? <Empty/> :
+              users.map((usr :any) => (
+                  <UserCard 
+                  key={usr._id} 
+                  name={usr.fullName} 
+                  email={usr.email} 
+                  avatar={dp(usr.image,usr.gender)} 
+                  Btn1='Message'   click1={()=>sendMessage(usr.fullName, usr.image)}
+                  Btn2='Unfriend'  click2={()=>unFriend(usr._id)}/>
+               ))
+            )
         }
       </div>
     </>
