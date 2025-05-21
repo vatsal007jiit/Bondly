@@ -77,12 +77,12 @@ const FriendList = () => {
           : (users.length === 0 ? <Empty/> :
               users.map((usr :any) => (
                   <UserCard 
-                  key={usr._id} 
-                  name={usr.fullName} 
-                  email={usr.email} 
-                  avatar={dp(usr.image,usr.gender)} 
-                  Btn1='Message'   click1={()=>sendMessage(usr.fullName, usr.image)}
-                  Btn2='Unfriend'  click2={()=>unFriend(usr._id)}/>
+                  key={usr?._id} 
+                  name={usr?.fullName} 
+                  email={usr?.email} 
+                  avatar={dp(usr?.image,usr?.gender)} 
+                  Btn1='Message'   click1={()=>sendMessage(usr?.fullName, usr?.image)}
+                  Btn2='Unfriend'  click2={()=>unFriend(usr?._id)}/>
                ))
             )
         }

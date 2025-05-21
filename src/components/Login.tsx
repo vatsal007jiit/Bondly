@@ -21,13 +21,16 @@ export default function Signin() {
       toast.success(data.message)
 
       // await mutate("/auth/session"); // [Not needed ...]This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time . 
-      setLoading(false)
+      
       navigate('/home')
 
     } 
   
     catch(err: unknown) {
      catchErr(err)
+    }
+    finally{
+      setLoading(false)
     }
 
   }

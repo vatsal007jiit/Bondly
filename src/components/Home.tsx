@@ -1,58 +1,137 @@
-import React from "react";
-import avatar from "../Images/avatar.webp";
+import React, { useContext, useState } from "react";
 import Btn from "./shared/Btn";
 import OnlineCard from "./shared/OnlineCard";
 import SideMenu from "./shared/SideMenu";
 import Post from "./shared/Post";
 import useSWR from "swr";
 import Fetcher from "../lib/Fetcher";
-import {Skeleton} from "antd"
+import { Skeleton, Spin } from "antd";
 import dp from "../lib/DP";
+import CreatePostModal from "./CreatePostModal";
+import UserContext from "./UserContext";
+
+import HttpInterceptor from "../lib/HttpInterceptor";
+import { toast } from "react-toastify";
+import uploadData from "../lib/Upload_Data";
+import catchErr from "../lib/CatchErr";
+import Empty from "./shared/Empty";
 
 const Home: React.FC = () => {
-  const {data, isLoading} =useSWR('/friend/fetch',Fetcher)
-  
+  const { data, isLoading } = useSWR("/friend/fetch", Fetcher);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const { session: user } = useContext(UserContext);
+  const [postText, setPostText] = useState("");
+
+  const handleNewPost = async (text: string, media?: File) => {
+    try {
+      setIsUploading(true)
+     const path = `posts/${user.id}/${media?.name}`
+     const payload = {
+      text,
+      media: (media!= null) ? path : null
+     }
+     if (media) {
+         await uploadData(media, path); // Ensures upload is complete before continuing so using await
+      }
+     const {data} = await HttpInterceptor.post("/post/create", payload)
+     toast.success(data.message)
+
+     setPostText(""); 
+    } 
+    catch (error: unknown) {
+      catchErr(error)
+    }
+    finally{
+      setIsUploading(false)
+    }
+  };
+
+  const { data: fdPosts, error, isLoading: loadingPosts } = useSWR("/post", Fetcher);
+
   return (
     <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
-    {/* Left Sidebar */}
-    <SideMenu/>
+      {/* Left Sidebar */}
+      <SideMenu />
+      <CreatePostModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onPost={handleNewPost}
+        user={{ name: "You", dp: user.image }}
+      />
 
-    {/* Main Feed */}
-    <main className="ml-[18%] mr-[22%] mb-8 flex-1 p-6">
-      {/* Create Post */}
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-5 mb-8">
-        <textarea
-          placeholder="What's on your mind?"
-          className="w-full border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          rows={3}
-        />
-        <div className="text-right mt-3">
-          <Btn>Post</Btn>
-        </div>
-      </div>
+      {/* Main Feed */}
+      <main className="ml-[18%] mr-[22%] mb-8 flex-1 p-6">
+        {isUploading && <div className="mx-auto font-bold text-xl flex justify-center items-center gap-3 "> <Spin size="large" /> Uploading Post ...</div>}
+        {/* Create Post */}
+        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-5 mb-8">
+          <textarea
+            value={postText}
+            onChange={(e) => setPostText(e.target.value)}
+            placeholder="What's on your mind?"
+            className="w-full border border-gray-300 bg-gray-200 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            rows={3}
+          />
+          <div className="flex justify-between">
+            <div className="mt-3">
+              <Btn
+                type="secondary"
+                icon="multi-image-line"
+                onclick={() => setModalOpen(true)}
+              >
+                Photo/video
+              </Btn>
+            </div>
 
-      {/* Sample Posts */}
-      {[...Array(15)].map((_,index) => (
-        <Post key={index} name={"Rahul"} pic={avatar} created={"2025-05-05T07:36:53.299+00:00"} icon="close">Hello Byeeeeee</Post>
-      ))}
-    </main>
-
-    {/* Right Panel */}
-    <aside className="fixed top-19 right-0 h-screen overflow-y-auto scrollbar-fade w-[22%] md:flex flex-col gap-6 p-6 bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 shadow-md border-l border-gray-200 dark:border-gray-700">
-          <div>
-            <h2 className="text-2xl my-4 font-bold bg-gradient-to-r from-blue-800 to-pink-500 bg-clip-text text-transparent dark:text-indigo-400 border-b-1 border-indigo-200">Contacts</h2>
-            <ul className="space-y-2 pb-16 text-gray-700 dark:text-gray-200 text-sm">
-              {isLoading && <Skeleton active/>}
-              {data?.friends && (data?.friends).map((fd: any, index: number) => (
-                <OnlineCard key={fd._id} name={fd.fullName} avatar={dp(fd.image,fd.gender)} status={index%2==0 ? "online" : "offline"}/>
-              ))}
-              <div className="border-b-1 border-indigo-200 my-1"></div>
-            </ul>
-            
+            <div className="text-right mt-3">
+              <Btn onclick={() => handleNewPost(postText)}>Post</Btn>
+            </div>
           </div>
-    </aside>
-  </div>
-);
+        </div>
+          {/* Fetch Friends Posts */}
+
+        {loadingPosts && (<Skeleton />)}
+        {error && (<p className="text-center text-red-500">Failed to load posts</p> )}
+         
+        {fdPosts && fdPosts.posts.length === 0 && ( <Empty/> )}
+
+        {fdPosts &&
+          fdPosts.posts.map((post: any) => (
+            <Post
+              key={post._id}
+              name= {post?.user?.fullName}
+              dp={ dp(post?.user?.image, post.user?.gender) }
+              post_media={post.media}
+              created={post.createdAt}
+            >
+              {post.text}
+            </Post>
+          ))}
+      </main>
+
+      {/* Right Panel */}
+      <aside className="fixed top-19 right-0 h-screen overflow-y-auto scrollbar-fade w-[22%] md:flex flex-col gap-6 p-6 bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500 dark:from-gray-800 dark:via-gray-800 dark:to-gray-800 shadow-md border-l border-gray-200 dark:border-gray-700">
+        <div>
+          <h2 className="text-2xl my-4 font-bold bg-gradient-to-r from-blue-800 to-pink-500 bg-clip-text text-transparent dark:text-indigo-400 border-b-1 border-indigo-200">
+            Contacts
+          </h2>
+          <ul className="space-y-2 pb-16 text-gray-700 dark:text-gray-200 text-sm">
+            {isLoading && <Skeleton active />}
+            {data?.friends &&
+              (data?.friends).map((fd: any, index: number) => (
+                <OnlineCard
+                  key={fd?._id}
+                  name={fd?.fullName}
+                  avatar={dp(fd?.image, fd?.gender)}
+                  status={index % 2 == 0 ? "online" : "offline"}
+                />
+              ))}
+            <div className="border-b-1 border-indigo-200 my-1"></div>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  );
 };
 
 export default Home;

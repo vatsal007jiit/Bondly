@@ -80,12 +80,12 @@ const FriendRequest = () => {
           ? [...Array(8)].map((_, idx) => <ShimmerCard key={idx} />) 
           : (users.length === 0 ? (<div className="flex justify-center items-center h-full"> <Empty/> </div>) : 
               users.map((usr: any) => (
-                <UserCard key={usr._id} 
-                name={usr.fullName} 
-                email={usr.email} 
-                avatar={dp(usr.image,usr.gender)} 
-                Btn1='Confirm' click1={()=>acceptRequest(usr._id)} 
-                Btn2='Delete' click2={()=>rejectRequest(usr._id)} />
+                <UserCard key={usr?._id} 
+                name={usr?.fullName} 
+                email={usr?.email} 
+                avatar={dp(usr?.image,usr?.gender)} 
+                Btn1='Confirm' click1={()=>acceptRequest(usr?._id)} 
+                Btn2='Delete' click2={()=>rejectRequest(usr?._id)} />
                 ))
             )
         }

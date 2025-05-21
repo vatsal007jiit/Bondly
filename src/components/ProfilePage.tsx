@@ -1,22 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import SideMenu from "./shared/SideMenu";
-import avatarMale from "./../Images/avatar.webp";
-import avatarFem from "./../Images/avatar-fem.png";
 import UserContext from "./UserContext";
 import moment from "moment";
 import HttpInterceptor from "../lib/HttpInterceptor";
 import catchErr from "../lib/CatchErr";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
-import { uploadProfilePic } from "../lib/Upload_Dp";
-import { downloadProfilePic } from "../lib/Download_Dp";
+import uploadData from "../lib/Upload_Data";
+import dp from "../lib/DP";
+// import { downloadProfilePic } from "../lib/Download_Dp";
 
 export default function ProfilePage() {
   
   const {session : user} = useContext(UserContext)
-  const avatar = (user.gender==='Male') ? avatarMale : avatarFem
+  // const avatar = (user.gender==='Male') ? avatarMale : avatarFem
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>(user.image);
+  const [imagePreview, setImagePreview] = useState<string>(dp(user.image, user.gender));
   const [fullName, setFullName] = useState(user.fullName);
   const [gender, setGender] = useState(user.gender);
   const [dob, setDob] = useState(moment(user.dob).format("YYYY-MM-DD"));
@@ -43,8 +42,9 @@ export default function ProfilePage() {
     try {
       const payload = {id:user.id , fullName, gender, dob, image: `https://bondly-network.s3.ap-south-1.amazonaws.com/profile-pic/dp_${user.id}.jpg` }
       console.log(payload);
+      const path = `profile-pic/dp_${user.id}.jpg`
       if (profileImage) {
-         await uploadProfilePic(profileImage, user.id, "public-read"); // Ensures upload is complete before continuing so using await
+         await uploadData(profileImage, path, "public-read"); // Ensures upload is complete before continuing so using await
       }
       const {data} = await HttpInterceptor.post("/auth/updateProfile",payload)
       console.log(data)
@@ -53,7 +53,7 @@ export default function ProfilePage() {
       await mutate("/auth/session")
     
       toast.success("Profile Updated");
-    } 
+    }  
     catch (error: unknown) {
       catchErr(error)
     }
@@ -72,7 +72,7 @@ export default function ProfilePage() {
             <label htmlFor="profilePic" className="cursor-pointer">
               <img
                 src={
-                  imagePreview || avatar
+                  imagePreview 
                 }
                 alt="Profile"
                 className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 dark:border-gray-200 shadow"

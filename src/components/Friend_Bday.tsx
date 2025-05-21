@@ -86,10 +86,10 @@ const Friend_Bday = () => {
         ) : (
           users.map((usr: any) => (
             <UserCard
-              key={usr._id}
-              name={usr.fullName}
-              dob={format(usr.dob)}
-              avatar={dp(usr.image, usr.gender)}
+              key={usr?._id}
+              name={usr?.fullName}
+              dob={format(usr?.dob)}
+              avatar={dp(usr?.image, usr?.gender)}
             />
           ))
         )}

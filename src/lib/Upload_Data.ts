@@ -3,25 +3,27 @@ import HttpInterceptor from "./HttpInterceptor"
 
 type ACLType = "private" | "public-read"
 
-export const uploadProfilePic = async (profileImage: any, id: number, acl: ACLType = 'private')=>{
+const uploadData = async (mediaFile: any, path: string, acl: ACLType = 'private')=>{
     try {
       const payload = {
-        path:`profile-pic/dp_${id}.jpg`,
-        type:profileImage?.type,
-        acl:acl
+        path: path,
+        type: mediaFile?.type,
+        acl: acl
       }
 
       const options = {
         headers:{
-          'Content-Type': profileImage?.type
+          'Content-Type': mediaFile?.type
         }
       }
       const {data} = await HttpInterceptor.post('/storage/upload', payload)
      
-      const response = await HttpInterceptor.put(data.url, profileImage, options)
+      const response = await HttpInterceptor.put(data.url, mediaFile, options)
       console.log("ETag:", response.headers.etag);
     } 
     catch (error: unknown) {
       catchErr(error)
     }
-  }
+}
+
+export default uploadData
