@@ -9,6 +9,7 @@ import Input from "./shared/Input";
 
 // import { mutate } from "swr";
 import catchErr from "../lib/CatchErr";
+import { initializeSocket } from "../lib/socket";
 
 export default function Signin() {
   
@@ -22,6 +23,11 @@ export default function Signin() {
 
       // await mutate("/auth/session"); // [Not needed ...]This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time . 
       
+      // Initialize WebSocket connection
+      initializeSocket(); // No need to pass accessToken since it's in the cookie
+      console.log("WebSocket initialized after login");
+
+
       navigate('/home')
 
     } 

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Model from "./shared/Model";
 import Btn from "./shared/Btn";
 import { IoIosCloseCircle } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GrAttachment } from "react-icons/gr";
+import { socket } from "../lib/socket";
+
 
 type Message = {
   id: number;
@@ -30,8 +32,27 @@ const ChatBox: React.FC = () => {
       ...prev,
       { id: Date.now(), text: newMessage, sender: "me" },
     ]);
+
+    socket.on('connect',()=>{
+      console.log("Connected to server:", socket.id)
+    })
+    socket.emit('message',`Frontend:${newMessage}`)
+
+    socket.on('message',(msg)=>{
+      console.log(msg)
+    })
+
+
+
+
     setNewMessage("");
   };
+
+  // useEffect(()=>{
+  //   socket.on("connect", ()=>{
+  //     console.log("Socket connected")
+  //   })
+  // }, [])
 
   return (
     <Model title="Chat">
@@ -41,7 +62,9 @@ const ChatBox: React.FC = () => {
              <img src={avatar} alt="Avatar" className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 " />
              <h1 className="capitalize">{name}</h1> 
              <button
-                onClick={()=>{navigate('/home')}} 
+                onClick={()=>{
+                  socket.disconnect()
+                  navigate('/home')}} 
                 className="absolute top-5 right-5 text-2xl text-gray-400 hover:text-gray-600 hover:dark:text-gray-200 transition-all cursor-pointer "><IoIosCloseCircle />
              </button>
           </div>

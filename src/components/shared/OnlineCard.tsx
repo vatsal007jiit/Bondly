@@ -3,7 +3,6 @@ import { MdOutlineChat } from "react-icons/md";
 import { IoCallOutline } from "react-icons/io5";
 import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
-// import { downloadProfilePic } from '../../lib/Download_Dp';
 
 interface OnlineInterface {
   name: string,
@@ -38,20 +37,6 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, status }) => {
       },
     });
   };
-
-  // const [imagePreview, setImagePreview] = useState(
-  //   gender === "Male" ? avatarMale : avatarFem
-  // );
-
-  // const donwload_dp = async () => {
-  //   const url = await downloadProfilePic(avatar);
-  //   setImagePreview(url);
-  // };
-
-  // useEffect(() => {
-  //   if(avatar)
-  //     donwload_dp()
-  // }, []);
 
   return (
     <div className='flex justify-between items-center my-6 bg-blue-300 dark:bg-gray-700 rounded-lg p-2'>
