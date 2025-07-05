@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import UserCard from "./shared/UserCard";
-import dp from "../lib/DP";
-import HttpInterceptor from "../lib/HttpInterceptor";
-import moment from "moment";
-import Empty from "./shared/Empty";
+import UserCard from "../shared/UserCard";
+import HttpInterceptor from "../../lib/HttpInterceptor";
+import dp from "../../lib/DP";
+import Empty from "../shared/Empty";
+import { toast } from "react-toastify";
+import catchErr from "../../lib/CatchErr";
 
-const Friend_Bday = () => {
+const Friend_SentReq = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true); // <- new loading state
 
@@ -15,8 +16,8 @@ const Friend_Bday = () => {
 
   const fetchData = async () => {
     try {
-      const { data } = await HttpInterceptor.get("/friend/fetch");
-      console.log(data.friends);
+      const { data } = await HttpInterceptor.get("/friend/sent");
+      console.log(data.sentRequest);
       if (data.friends) {
         setUsers(data.friends);
         setLoading(false);
@@ -27,35 +28,13 @@ const Friend_Bday = () => {
     }
   };
 
-  const format = (dob: string) => {
-    const dobMoment = moment(dob);
-    if (!dobMoment.isValid()) return "Invalid date";
-
-    const today = moment();
-    const currentYear = today.year();
-
-    let targetDate = moment({
-      year: currentYear,
-      month: dobMoment.month(),
-      day: dobMoment.date(),
-    });
-
-    if (targetDate.isBefore(today, "day")) {
-      targetDate = targetDate.add(1, "year");
-    }
-
-    const formattedDate = targetDate.format("Do MMMM");
-    const daysLeft = targetDate.diff(today, "days");
-
-    if (daysLeft > 31) {
-      const monthsLeft = targetDate.diff(today, "months");
-      return `${formattedDate} - ${monthsLeft} month${
-        monthsLeft > 1 ? "s" : ""
-      } to go`;
-    } else {
-      return `${formattedDate} - ${daysLeft} day${
-        daysLeft !== 1 ? "s" : ""
-      } to go`;
+  const cancelRequest = async (id: string) => {
+    try {
+      const { data } = await HttpInterceptor.delete(`/friend/cancel/${id}`);
+      toast.success(data.message);
+      fetchData()
+    } catch (error: unknown) {
+      catchErr(error);
     }
   };
 
@@ -75,7 +54,7 @@ const Friend_Bday = () => {
   return (
     <>
       <h1 className="text-4xl font-bold text-center dark:text-white mb-8 drop-shadow-lg">
-        Happy Birthday
+        Friend Requests
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -86,10 +65,13 @@ const Friend_Bday = () => {
         ) : (
           users.map((usr: any) => (
             <UserCard
-              key={usr?._id}
-              name={usr?.fullName}
-              dob={format(usr?.dob)}
-              avatar={dp(usr?.image, usr?.gender)}
+              key={usr._id}
+              name={usr.fullName}
+              email={usr.email}
+              avatar={dp(usr.image, usr.gender)}
+              Btn2="Cancel Request"
+              click2={() => cancelRequest(usr._id)}
+              icon2="user-minus-line"
             />
           ))
         )}
@@ -98,4 +80,4 @@ const Friend_Bday = () => {
   );
 };
 
-export default Friend_Bday;
+export default Friend_SentReq;

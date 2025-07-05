@@ -4,8 +4,8 @@ import logo from "../Images/Logo-B2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import useSWR from "swr";
 import Fetcher from "../lib/Fetcher";
-import logout from "./Logout";
 import UserContext from "./UserContext";
+import logout from "./Auth/Logout";
 
 type HeaderProps = {
     toggleDark: () => void;

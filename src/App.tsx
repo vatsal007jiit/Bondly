@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
+import Login from "./components/Auth/Login";
+import Signup from "./components/Auth/Signup";
 import Layout from "./components/Layout";
-import FriendList from "./components/FriendList";
+import FriendList from "./components/Friend/FriendList";
 import Friends from "./components/Friends_Nav";
-import FriendRequest from "./components/FriendRequest";
-import SendRequest from "./components/Friend_Suggestion";
-import VideoCall from "./components/VideoCall";
-import AudioCall from "./components/AudioCall";
-import ChatBox from "./components/ChatBox";
+import FriendRequest from "./components/Friend/FriendRequest";
+import SendRequest from "./components/Friend/Friend_Suggestion";
+import VideoCall from "./components/Call/VideoCall";
+import AudioCall from "./components/Call/AudioCall";
+import ChatBox from "./components/Call/ChatBox";
 import MyPost from "./components/MyPost";
 import "remixicon/fonts/remixicon.css";
 import NotFound from "./components/NotFound";
@@ -18,8 +18,9 @@ import { ToastContainer } from 'react-toastify';
 import Guard from "./components/Guard";
 import { useState } from "react";
 import ProfilePage from "./components/ProfilePage";
-import Friend_SentReq from "./components/Friend_SentReq";
-import Friend_Bday from "./components/Friend_Bday";
+
+import Friend_Bday from "./components/Friend/Friend_Bday";
+import Friend_SentReq from "./components/Friend/Friend_SentReq";
 // import useSWR from "swr";
 // import Fetcher from "./lib/Fetcher";
 

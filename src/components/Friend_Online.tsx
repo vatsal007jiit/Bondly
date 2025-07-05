@@ -6,6 +6,10 @@ import { Skeleton } from "antd";
 import OnlineCard from "./shared/OnlineCard";
 import dp from "../lib/DP";
 
+interface onlineUserInterface {
+  id: string
+}
+
 const Friend_Online = () => {
   const { data, isLoading } = useSWR("/friend/fetch", Fetcher);
   const [onlineUsers , setOnlineUsers]  = useState([])
@@ -55,18 +59,18 @@ useEffect(() => {
       </h2>
       <ul className="space-y-2 pb-16 text-gray-700 dark:text-gray-200 text-sm">
         {isLoading && <Skeleton active />}
-        {/* {data?.friends &&
-          (data?.friends).map((fd: any, index: number) => (
+        {data?.friends &&
+          (data?.friends).map((fd: any) => (
             <OnlineCard
               key={fd?._id}
               name={fd?.fullName}
               avatar={dp(fd?.image, fd?.gender)}
-              status={index % 2 == 0 ? "online" : "offline"}
+              status={onlineUsers.some((user: onlineUserInterface) => user.id === fd?._id) ? "online" : "offline"}
             />
-          ))} */}
-          {onlineUsers.map((usr,index)=>(
-            <div key={index}>{usr.id}</div>
           ))}
+          {/* {onlineUsers.map((usr,index)=>(
+            <div key={index}>{usr.id}</div>
+          ))} */}
         <div className="border-b-1 border-indigo-200 my-1"></div>
       </ul>
     </div>
@@ -76,7 +80,7 @@ useEffect(() => {
 export default Friend_Online;
 
 
-//new grok code
+//new final grok code
 // import { useEffect, useState } from "react";
 // import { socket } from "../lib/socket";
 // import useSWR from "swr";

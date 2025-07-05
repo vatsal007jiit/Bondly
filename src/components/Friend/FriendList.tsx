@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import UserCard from './shared/UserCard';
-import HttpInterceptor from '../lib/HttpInterceptor';
-import dp from '../lib/DP';
-import Empty from './shared/Empty';
+import UserCard from '../shared/UserCard';
+import HttpInterceptor from '../../lib/HttpInterceptor';
+import dp from '../../lib/DP';
+import Empty from '../shared/Empty';
 import { toast } from 'react-toastify';
-import catchErr from '../lib/CatchErr';
+import catchErr from '../../lib/CatchErr';
 import { useNavigate } from 'react-router-dom';
 
 const FriendList = () => {

@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
-import HttpInterceptor from "../lib/HttpInterceptor";
-import catchErr from "../lib/CatchErr";
+import catchErr from "../../lib/CatchErr";
 import { mutate } from "swr";
-import { disconnectSocket } from "../lib/socket";
+import { disconnectSocket } from "../../lib/socket";
+import HttpInterceptor from "../../lib/HttpInterceptor";
 
 
 const logout = async (navigate: Function,setSession: Function) => {

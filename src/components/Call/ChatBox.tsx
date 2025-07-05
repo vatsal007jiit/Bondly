@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import Model from "./shared/Model";
-import Btn from "./shared/Btn";
+import React, { useState } from "react";
+import Model from "../shared/Model";
+import Btn from "../shared/Btn";
 import { IoIosCloseCircle } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GrAttachment } from "react-icons/gr";
-import { socket } from "../lib/socket";
+import { socket } from "../../lib/socket";
 
 
 type Message = {

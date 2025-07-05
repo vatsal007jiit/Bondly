@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import UserCard from './shared/UserCard';
-import HttpInterceptor from '../lib/HttpInterceptor';
-import dp from '../lib/DP';
+import UserCard from '../shared/UserCard';
+import HttpInterceptor from '../../lib/HttpInterceptor';
+import dp from '../../lib/DP';
 import { toast } from 'react-toastify';
-import catchErr from '../lib/CatchErr';
-import Empty from './shared/Empty';
+import catchErr from '../../lib/CatchErr';
+import Empty from '../shared/Empty';
 
 const SendRequest = () => {
   const [users, setUsers] = useState([]);

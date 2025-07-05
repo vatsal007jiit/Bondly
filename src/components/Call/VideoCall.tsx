@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Model from "./shared/Model"
+import Model from "../shared/Model"
 import { FaVideo , FaVideoSlash , FaMicrophoneAlt} from "react-icons/fa";
 import { FaMicrophoneLinesSlash } from "react-icons/fa6";
 import { MdCallEnd } from "react-icons/md";

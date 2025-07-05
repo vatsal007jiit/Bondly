@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PhoneOff } from "lucide-react";
 import { FaMicrophoneAlt} from "react-icons/fa";
 import { FaMicrophoneLinesSlash } from "react-icons/fa6";
-import Model from "./shared/Model";
+import Model from "../shared/Model";
 import { useLocation, useNavigate } from "react-router-dom";
 
 

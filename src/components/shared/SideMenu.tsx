@@ -1,7 +1,7 @@
 import { useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../UserContext";
-import logout from "../Logout";
+import logout from "../Auth/Logout";
 import dp from "../../lib/DP";
 // import { downloadProfilePic } from "../../lib/Download_Dp";
 

@@ -3,13 +3,13 @@ import logo from "../Images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
 // import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
-import HttpInterceptor from "../lib/HttpInterceptor";
-import Form, { FormDataType } from "./shared/Form";
-import Input from "./shared/Input";
+import HttpInterceptor from "../../lib/HttpInterceptor";
+import Form, { FormDataType } from "../shared/Form";
+import Input from "../shared/Input";
 
 // import { mutate } from "swr";
-import catchErr from "../lib/CatchErr";
-import { initializeSocket } from "../lib/socket";
+import catchErr from "../../lib/CatchErr";
+import { initializeSocket } from "../../lib/socket";
 
 export default function Signin() {
   
@@ -24,7 +24,7 @@ export default function Signin() {
       // await mutate("/auth/session"); // [Not needed ...]This triggers refetch and updates SWR cache , so that after logout  we dont get data null and login not happening in one time . 
       
       // Initialize WebSocket connection
-      initializeSocket(); // No need to pass accessToken since it's in the cookie
+      initializeSocket();
       console.log("WebSocket initialized after login");
 
 
