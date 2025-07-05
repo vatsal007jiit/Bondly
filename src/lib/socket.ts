@@ -1,8 +1,3 @@
-// import {io} from "socket.io-client"
-
-// export const socket = io(import.meta.env.VITE_SERVER, {withCredentials: true})
-
-// lib/socket.ts
 import { io } from "socket.io-client";
 
 const socket = io(import.meta.env.VITE_SERVER|| "http://localhost:8080", {

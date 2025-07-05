@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../Images/Logo-B2.jpg";
+import logo from "../../Images/Logo-B2.jpg";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import HttpInterceptor from "../../lib/HttpInterceptor";

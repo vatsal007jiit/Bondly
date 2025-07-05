@@ -5,19 +5,21 @@ import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 
 interface OnlineInterface {
+  id: string
   name: string,
   avatar: string,
   status: "online" | "offline"
 }
 
-const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, status }) => {
+const OnlineCard: React.FC<OnlineInterface> = ({id, name, avatar, status }) => {
 
   const navigate = useNavigate()
 
   const handleChat = () => {
     navigate('/chat', {
       state: {
-        name: name,
+        id: id,
+        name,
         avatar
       },
     });
@@ -25,14 +27,17 @@ const OnlineCard: React.FC<OnlineInterface> = ({ name, avatar, status }) => {
   const handleVideoCall = () => {
     navigate('/video', {
       state: {
-        name
+        id: id,
+        name,
+        avatar
       },
     });
   };
   const handleAudioCall = () => {
     navigate('/audio', {
       state: {
-        name: name,
+        id: id,
+        name,
         avatar
       },
     });

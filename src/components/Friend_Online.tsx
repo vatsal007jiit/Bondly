@@ -16,7 +16,7 @@ const Friend_Online = () => {
 
   const onlineHandler = (users: any) => {
     setOnlineUsers(users);
-    console.log("Online users updated:", users); // Debug log
+    console.log("Online users updated:", users); 
   };
 
 //   useEffect(() => {
@@ -44,7 +44,7 @@ useEffect(() => {
 
     socket.on("online", onlineHandler);
 
-    // Cleanup on unmount
+    // Cleanup on unmount . To prevent Memory Leaks If the component mounts/unmounts multiple times (e.g., you navigate away and back), you'll keep adding more listeners. 2 PRevent Duplicate State Updates when useEffect rerun
     return () => {
       socket.off("online", onlineHandler);
       socket.off("connect");
@@ -63,6 +63,7 @@ useEffect(() => {
           (data?.friends).map((fd: any) => (
             <OnlineCard
               key={fd?._id}
+              id = {fd?._id}
               name={fd?.fullName}
               avatar={dp(fd?.image, fd?.gender)}
               status={onlineUsers.some((user: onlineUserInterface) => user.id === fd?._id) ? "online" : "offline"}
@@ -80,7 +81,7 @@ useEffect(() => {
 export default Friend_Online;
 
 
-//new final grok code
+//new final  code
 // import { useEffect, useState } from "react";
 // import { socket } from "../lib/socket";
 // import useSWR from "swr";

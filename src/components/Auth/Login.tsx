@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../Images/Logo.png";
+import logo from "../../Images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
 // import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
