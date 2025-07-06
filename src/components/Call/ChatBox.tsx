@@ -6,24 +6,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { GrAttachment } from "react-icons/gr";
 import { socket } from "../../lib/socket";
 import UserContext from "../UserContext";
+import useSWR from "swr";
+import Fetcher from "../../lib/Fetcher";
+import moment from "moment";
 
 interface msgRecInterface{
   from: string
   to: string
   message: string
+  createdAt?: string
 }
 
 const ChatBox: React.FC = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const chatContainer = useRef<HTMLDivElement>(null); // Scroll chat down automatically to show latest msg on sending new message
   const inputRef = useRef<HTMLInputElement>(null);
   const { session: user } = useContext(UserContext);
   const {id, name, avatar } = location.state
   const [chats, setChats] = useState<msgRecInterface[]>([]) 
   const [fileName, setFileName] = useState<string | null>(null);
-
-
+  const {data} = useSWR(`/chat/${id}`, Fetcher)
+  console.log(data)
   const sendMessage = (e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
     // const form = e.currentTarget
@@ -61,6 +66,20 @@ const ChatBox: React.FC = () => {
     }
   }, [])
 
+  useEffect(()=>{
+    if(data)
+      setChats(data)
+  }, [data])
+
+  //Setup Scrollbar position of chats
+  useEffect(()=>{
+
+    const chatDiv = chatContainer.current 
+    if(chatDiv)
+      chatDiv.scrollTop = chatDiv.scrollHeight
+
+  }, [chats])
+
   return (
     <Model title="Chat">
        <div className="w-full max-w-2xl h-[500px] mx-auto border border-gray-300 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl shadow-lg flex flex-col overflow-hidden">
@@ -80,7 +99,7 @@ const ChatBox: React.FC = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 px-4 py-3 space-y-3 overflow-y-auto bg-gray-50 dark:bg-gray-900 scroll-smooth">
+        <div ref={chatContainer} className="flex-1 px-4 py-3 space-y-3 overflow-y-auto bg-gray-50 dark:bg-gray-900 scroll-smooth">
           {chats.map((msg, index) => {
             const isSender = msg.from === user.id;
             const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -99,7 +118,7 @@ const ChatBox: React.FC = () => {
                 </div>
                 <div>{msg.message}</div>
                 <div className={`absolute text-[10px] bottom-1 right-2 opacity-70 ${isSender ? "text-white" : "text-gray-500"}`}>
-                  {time}
+                  {moment(msg?.createdAt).format('D MMM, HH:mm') || time}
                 </div>
               </div>
             );
@@ -109,7 +128,7 @@ const ChatBox: React.FC = () => {
         {/* Input Area */}
         <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3 bg-white dark:bg-gray-800 flex items-center gap-2">
           {/* Attachment */}
-          <label className="relative cursor-pointer">
+          {/* <label className="relative cursor-pointer">
             <input
               type="file"
               className="hidden"
@@ -126,7 +145,7 @@ const ChatBox: React.FC = () => {
             <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-300 hover:dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 transition-all">
               <GrAttachment className="text-xl" />
             </div>
-          </label>
+          </label> */}
 
           {/* Chat input */}
           <div className="flex flex-col w-full gap-1">
