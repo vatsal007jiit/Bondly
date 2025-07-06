@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 import Btn from "./shared/Btn";
 import SideMenu from "./shared/SideMenu";
 import Post from "./shared/Post";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import Fetcher from "../lib/Fetcher";
-import { Skeleton, Spin } from "antd";
+import { Pagination, Result, Skeleton, Spin } from "antd";
 import dp from "../lib/DP";
 import CreatePostModal from "./CreatePostModal";
 import UserContext from "./UserContext";
@@ -22,7 +22,10 @@ const Home: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const { session: user } = useContext(UserContext);
   const [postText, setPostText] = useState("");
-
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(4)
+  const { data: fdPosts, error, isLoading: loadingPosts } = useSWR(`/post?page=${page}&limit=${limit}`, Fetcher);
+console.log(fdPosts)
   const handleNewPost = async (text: string, media?: File) => {
     try {
       setIsUploading(true)
@@ -47,7 +50,13 @@ const Home: React.FC = () => {
     }
   };
 
-  const { data: fdPosts, error, isLoading: loadingPosts } = useSWR("/post", Fetcher);
+  const onPaginate = (page: number, pageSize?: number)=>{
+    setPage(page);
+    if (pageSize) 
+      setLimit(pageSize);
+
+    // mutate(`/posts?page=${page}&limit=${limit}`)
+  }
 
   return (
     <div className="min-h-screen bg-gray-200 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans flex">
@@ -90,8 +99,13 @@ const Home: React.FC = () => {
         </div>
           {/* Fetch Friends Posts */}
 
-        {loadingPosts && (<Skeleton />)}
-        {error && (<p className="text-center text-red-500">Failed to load posts</p> )}
+        {loadingPosts && (<Skeleton avatar paragraph={{ rows: 10 }} />)}
+        {error && (<Result
+            status="error"
+            title="Failed to Load Posts"
+            subTitle="Please check your network or try again later"
+          />)
+        }
          
         {fdPosts && fdPosts.posts.length === 0 && ( <Empty/> )}
 
@@ -106,7 +120,18 @@ const Home: React.FC = () => {
             >
               {post.text}
             </Post>
-          ))}
+          ))
+        }
+        <div className='flex justify-center w-full mt-10 '>
+          <Pagination
+            total={fdPosts?.total}
+            onChange={onPaginate}
+            current={page}
+            pageSize={limit}
+            showSizeChanger
+            pageSizeOptions={['4', '8']}
+          />
+        </div>
       </main>
 
       {/* Right Panel */}
