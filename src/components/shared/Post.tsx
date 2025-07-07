@@ -1,5 +1,5 @@
 import moment from "moment";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
@@ -9,20 +9,33 @@ import catchErr from "../../lib/CatchErr";
 import HttpInterceptor from "../../lib/HttpInterceptor";
 import { toast } from "react-toastify";
 import { mutate } from "swr";
+import { Tooltip } from "antd";
+import UserContext from "../UserContext";
+
 
 interface PostInterface {
-  postId?: string;
+  postId: string;
+  likes: { _id: string; fullName: string }[];
   children: string;
   name: string;
   dp: string;
   post_media: string;
   created: string;
   icon?: "delete";
+  page?: number;
+  limit?: number;
 }
-const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, created, icon}) =>
+const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media, created, icon, page, limit}) =>
 {
+  const { session: user } = useContext(UserContext);
+  const [liked, setLiked] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('')
-
+  const likeStatus = liked ? "Liked" : "Like";
+  const LikeBtnStyle = liked ? "primary" : "light";
+  const LikeIcon = liked ? "thumb-up-fill" : "thumb-up-line";
+  const time = moment(created).fromNow();
+  const likeValue = likes.length
+  
   const download_Media = async () =>{
     if(post_media)
     {
@@ -35,6 +48,7 @@ const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, create
     download_Media()
   },[post_media])
   
+
   const deletePost = async (postId: string, path: string|null) =>{
     try {
       const{data} = await HttpInterceptor.delete(`/post/delete/${postId}`)
@@ -53,19 +67,27 @@ const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, create
     }
   }
   
-  // 5 years on a journey for eternity. How blessed Iam to find you , I love you with all my heart ❤️♾️❤️♾️❤️
-// As I step away from this format, it’s not easy — but it feels right. I’ve given it everything I had, and it’s given me back so much more than I could’ve hoped for. I’m walking away with a heart full of gratitude — for the game, for the people I shared the field with, and for every single person who made me feel seen along the way. I’ll always look back at my Test career with a smile. #269, signing off. 🇮🇳❤️
-  const [liked, setLiked] = useState(false);
-  const time = moment(created).fromNow();
-  // const date=moment(created).format("Do MMM YY, hh:mm a");
-  const likeValue = 55;
-  const handleLike = () => {
-    setLiked((prev) => !prev);
+  const handleLike = async (id: string) => {
+    try {
+      const {data} = await HttpInterceptor.put(`/post/like/${id}`, {})
+      setLiked((prev) => !prev);
+      toast.success(data.message)
+      mutate(`/post?page=${page}&limit=${limit}`)
+      mutate('/post/myPost')
+    } 
+    catch (error) {
+     catchErr(error)  
+    }
+    
   };
-  const likeStatus = liked ? "Liked" : "Like";
-  const LikeBtnStyle = liked ? "primary" : "light";
-  const LikeIcon = liked ? "thumb-up-fill" : "thumb-up-line";
-  const LikeCount = liked ? `You and ${likeValue} others` : `${likeValue}`;
+
+  useEffect(()=>{
+    if (likes.some(like => like._id === user.id)) {
+    setLiked(true);
+    
+  }
+  }, [likes])
+
   return (
     <>
       <div className="bg-white dark:bg-gray-800 rounded-2xl  shadow-md p-5 mb-8">
@@ -79,9 +101,15 @@ const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, create
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">{time}</p>
           </div>
-          <button onClick={() => deletePost(postId!, post_media)} className="absolute top-1 right-2 text-2xl text-gray-400 hover:text-gray-600 hover:dark:text-gray-200 transition-all cursor-pointer ">
-            {icon === "delete" && (<MdDeleteOutline />)}
-          </button>
+          {
+            icon === "delete" && 
+            (
+            <button onClick={() => deletePost(postId, post_media)} className="absolute top-1 right-2 text-2xl text-gray-400 hover:text-gray-600 hover:dark:text-gray-200 transition-all cursor-pointer ">
+            <MdDeleteOutline />
+            </button>
+            )
+          }
+         
         </div>
         <div>
           <p className="text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">
@@ -107,12 +135,14 @@ const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, create
 
         <div className="flex flex-col border-t pt-2 mt-2 border-t-gray-200 gap-2">
           <div className="flex justify-end gap-2">
-            <div className="flex gap-1">
-              <div className="bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500   text-white w-6 h-6 rounded-full  flex justify-center items-center">
-                <AiFillLike />{" "}
+            <Tooltip title={likes.length > 0 ? likes.map((like, index) => ( <p className="capitalize" key={index}>{like.fullName}</p> ) ): "None"}>
+              <div className="flex gap-1">
+                <div className="bg-gradient-to-br from-cyan-400 via-blue-400 to-pink-500   text-white w-6 h-6 rounded-full  flex justify-center items-center">
+                  <AiFillLike />{" "}
+                </div>
+                <div className="text-gray-600 dark:text-white">{likeValue}</div>
               </div>
-              <div className="text-gray-600 dark:text-white">{LikeCount}</div>
-            </div>
+            </Tooltip>
             <div className="flex gap-1">
               <div className=" text-gray-500 w-6 h-6 rounded-full  flex justify-center items-center">
                 <FaComment />{" "}
@@ -122,7 +152,7 @@ const Post: FC<PostInterface> = ({postId, children, name, dp, post_media, create
           </div>
 
           <div className="flex gap-2">
-            <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={handleLike}>
+            <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={()=>handleLike(postId)}>
               {likeStatus}
             </Btn>
             <Btn type="secondary" icon="chat-3-line">

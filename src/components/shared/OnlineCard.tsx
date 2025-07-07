@@ -1,7 +1,7 @@
 import React from 'react'
 import { MdOutlineChat } from "react-icons/md";
-import { IoCallOutline } from "react-icons/io5";
-import { FcVideoCall } from "react-icons/fc";
+// import { IoCallOutline } from "react-icons/io5";
+// import { FcVideoCall } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 
 interface OnlineInterface {
@@ -24,24 +24,24 @@ const OnlineCard: React.FC<OnlineInterface> = ({id, name, avatar, status }) => {
       },
     });
   };
-  const handleVideoCall = () => {
-    navigate('/video', {
-      state: {
-        id: id,
-        name,
-        avatar
-      },
-    });
-  };
-  const handleAudioCall = () => {
-    navigate('/audio', {
-      state: {
-        id: id,
-        name,
-        avatar
-      },
-    });
-  };
+  // const handleVideoCall = () => {
+  //   navigate('/video', {
+  //     state: {
+  //       id: id,
+  //       name,
+  //       avatar
+  //     },
+  //   });
+  // };
+  // const handleAudioCall = () => {
+  //   navigate('/audio', {
+  //     state: {
+  //       id: id,
+  //       name,
+  //       avatar
+  //     },
+  //   });
+  // };
 
   return (
     <div className='flex justify-between items-center my-6 bg-blue-300 dark:bg-gray-700 rounded-lg p-2'>
@@ -65,9 +65,9 @@ const OnlineCard: React.FC<OnlineInterface> = ({id, name, avatar, status }) => {
 
       {/* Right icons */}
       <div className='flex gap-2 text-xl'>
-        <button onClick={handleChat}className='text-blue-600 hover:text-blue-700 hover:scale-105 transition-all cursor-pointer'><MdOutlineChat /></button>
-        <button onClick={handleAudioCall} className='text-red-400 hover:text-red-600 hover:scale-105 transition-all cursor-pointer'><IoCallOutline /></button>
-        <button onClick={handleVideoCall} className='hover:scale-110 transition-all cursor-pointer'><FcVideoCall /></button>
+        <button onClick={handleChat} title="Chat" className='text-blue-600 hover:text-blue-700 hover:scale-105 transition-all cursor-pointer'><MdOutlineChat /></button>
+        {/* <button onClick={handleAudioCall} className='text-red-400 hover:text-red-600 hover:scale-105 transition-all cursor-pointer'><IoCallOutline /></button>
+        <button onClick={handleVideoCall} className='hover:scale-110 transition-all cursor-pointer'><FcVideoCall /></button> */}
       </div>
     </div>
   );

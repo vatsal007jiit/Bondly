@@ -11,7 +11,7 @@ import Empty from "./shared/Empty";
 const MyPost = () => {
   const { session: user } = useContext(UserContext);
   const { data, error, isLoading } = useSWR("/post/myPost", Fetcher);
-
+  console.log(data)
   return (
     <>
       <Model title="My Posts">
@@ -24,6 +24,7 @@ const MyPost = () => {
           data.posts.map((post: any) => (
             <Post
               key= {post._id}
+              likes={post.likes}
               postId= {post._id}
               name= "You"
               dp= {dp(user.image, user.gender)}

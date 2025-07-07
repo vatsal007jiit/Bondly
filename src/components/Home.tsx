@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Btn from "./shared/Btn";
 import SideMenu from "./shared/SideMenu";
 import Post from "./shared/Post";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import Fetcher from "../lib/Fetcher";
 import { Pagination, Result, Skeleton, Spin } from "antd";
 import dp from "../lib/DP";
@@ -54,8 +54,6 @@ console.log(fdPosts)
     setPage(page);
     if (pageSize) 
       setLimit(pageSize);
-
-    // mutate(`/posts?page=${page}&limit=${limit}`)
   }
 
   return (
@@ -93,7 +91,12 @@ console.log(fdPosts)
             </div>
 
             <div className="text-right mt-3">
-              <Btn onclick={() => handleNewPost(postText)}>Post</Btn>
+              {
+                !postText ?
+                <Btn type="disabled">Post</Btn> :
+                <Btn onclick={() => handleNewPost(postText)}>Post</Btn>
+              }
+              
             </div>
           </div>
         </div>
@@ -113,10 +116,14 @@ console.log(fdPosts)
           fdPosts.posts.map((post: any) => (
             <Post
               key={post._id}
+              postId= {post._id}
               name= {post?.user?.fullName}
               dp={ dp(post?.user?.image, post.user?.gender) }
               post_media={post.media}
               created={post.createdAt}
+              likes={post.likes}
+              page={page}
+              limit={limit}
             >
               {post.text}
             </Post>

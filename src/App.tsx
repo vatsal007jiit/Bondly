@@ -7,8 +7,8 @@ import FriendList from "./components/Friend/FriendList";
 import Friends from "./components/Friends_Nav";
 import FriendRequest from "./components/Friend/FriendRequest";
 import SendRequest from "./components/Friend/Friend_Suggestion";
-import VideoCall from "./components/Call/VideoCall";
-import AudioCall from "./components/Call/AudioCall";
+// import VideoCall from "./components/Call/VideoCall";
+// import AudioCall from "./components/Call/AudioCall";
 import ChatBox from "./components/Call/ChatBox";
 import MyPost from "./components/MyPost";
 import "remixicon/fonts/remixicon.css";
@@ -48,8 +48,8 @@ function App() {
                 <Route path="bday" element={<Friend_Bday />} />
               </Route>
               <Route path="/profile" element={<ProfilePage/>} />
-              <Route path="/video" element={<VideoCall />} />
-              <Route path="/audio" element={<AudioCall />} />
+              {/* <Route path="/video" element={<VideoCall />} />
+              <Route path="/audio" element={<AudioCall />} /> */}
               <Route path="/chat" element={<ChatBox />} />
               <Route path="/posts" element={<MyPost />} />
             </Route>
