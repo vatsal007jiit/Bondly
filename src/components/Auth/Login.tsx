@@ -74,7 +74,7 @@ export default function Signin() {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <Input type="password" name="password" placeholder="••••••••" value="12345"/>
+              <Input type="password" name="password" placeholder="••••••••" />
             </div>
             <button
               type="submit"
