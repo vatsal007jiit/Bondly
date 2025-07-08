@@ -11,7 +11,7 @@ import Empty from "./shared/Empty";
 const MyPost = () => {
   const { session: user } = useContext(UserContext);
   const { data, error, isLoading } = useSWR("/post/myPost", Fetcher);
-  console.log(data)
+
   return (
     <>
       <Model title="My Posts">

@@ -39,7 +39,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   const likeValue = likes.length
   const [showCmt, setShowCmt] = useState(false)
   const {data: comments} = useSWR(`/comment?post=${postId}`, Fetcher)
-  console.log(comments)
+
   const download_Media = async () =>{
     if(post_media)
     {

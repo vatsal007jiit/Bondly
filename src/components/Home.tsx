@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(4)
   const { data: fdPosts, error, isLoading: loadingPosts } = useSWR(`/post?page=${page}&limit=${limit}`, Fetcher);
-console.log(fdPosts)
+
   const handleNewPost = async (text: string, media?: File) => {
     try {
       setIsUploading(true)

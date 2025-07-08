@@ -16,7 +16,7 @@ const Friend_Online = () => {
 
   const onlineHandler = (users: any) => {
     setOnlineUsers(users);
-    console.log("Online users updated:", users); 
+    // console.log("Online users updated:", users); 
   };
 
 //   useEffect(() => {
@@ -37,7 +37,7 @@ useEffect(() => {
     } else {
       // Listen for connect event to emit "get-online" when connection is established
       socket.on("connect", () => {
-        console.log("Socket connected, emitting get-online");
+        // console.log("Socket connected, emitting get-online");
         socket.emit("get-online");
       });
     }

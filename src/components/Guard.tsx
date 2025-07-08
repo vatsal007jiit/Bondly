@@ -13,7 +13,7 @@ import Fetcher from "../lib/Fetcher";
   useEffect(() => {
     if (data) {
       setSession(data);
-      console.log("user---",session)
+      // console.log("user---",session)
     }
     if (error ) {
       const timer = setTimeout(() => setSession(false), 200);

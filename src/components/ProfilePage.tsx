@@ -41,13 +41,13 @@ export default function ProfilePage() {
     e.preventDefault();
     try {
       const payload = {id:user.id , fullName, gender, dob, image: `https://bondly-network.s3.ap-south-1.amazonaws.com/profile-pic/dp_${user.id}.jpg` }
-      console.log(payload);
+     
       const path = `profile-pic/dp_${user.id}.jpg`
       if (profileImage) {
          await uploadData(profileImage, path, "public-read"); // Ensures upload is complete before continuing so using await
       }
-      const {data} = await HttpInterceptor.post("/auth/updateProfile",payload)
-      console.log(data)
+      await HttpInterceptor.post("/auth/updateProfile",payload)
+    
 
       await mutate("/auth/refresh-Token")
       await mutate("/auth/session")

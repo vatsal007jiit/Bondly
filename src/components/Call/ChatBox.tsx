@@ -28,7 +28,7 @@ const ChatBox: React.FC = () => {
   const [chats, setChats] = useState<msgRecInterface[]>([]) 
   const [fileName, setFileName] = useState<string | null>(null);
   const {data} = useSWR(`/chat/${id}`, Fetcher)
-  console.log(data)
+ 
   const sendMessage = (e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault()
     // const form = e.currentTarget
@@ -51,7 +51,7 @@ const ChatBox: React.FC = () => {
   }
 
   const messageHandler = (messageRecieved : msgRecInterface)=>{
-    console.log(messageRecieved.message)
+    
     setChats((prev)=>[
       ...prev,
       messageRecieved

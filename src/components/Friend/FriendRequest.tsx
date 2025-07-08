@@ -17,7 +17,7 @@ const FriendRequest = () => {
   const fetchData = async () => {
     try {
       const { data } = await HttpInterceptor.get('/friend/requests')
-      console.log(data.friends)
+
        if (data.friends)
       {
         setUsers(data.friends);

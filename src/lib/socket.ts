@@ -9,7 +9,7 @@ const socket = io(import.meta.env.VITE_SERVER|| "http://localhost:8080", {
 export const initializeSocket = () => {
   if (!socket.connected) {
     socket.connect();
-    console.log("Socket connection initiated");
+    // console.log("Socket connection initiated");
   }
 };
 
@@ -22,7 +22,7 @@ socket.on("connect_error", (error) => {
 export const disconnectSocket = () => {
   if (socket.connected) {
     socket.disconnect();
-    console.log("Socket disconnected");
+    // console.log("Socket disconnected");
   }
 };
 

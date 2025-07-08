@@ -17,9 +17,9 @@ const uploadData = async (mediaFile: any, path: string, acl: ACLType = 'private'
         }
       }
       const {data} = await HttpInterceptor.post('/storage/upload', payload)
-     
-      const response = await HttpInterceptor.put(data.url, mediaFile, options)
-      console.log("ETag:", response.headers.etag);
+      await HttpInterceptor.put(data.url, mediaFile, options)
+      // const response = await HttpInterceptor.put(data.url, mediaFile, options)
+      // console.log("ETag:", response.headers.etag);
     } 
     catch (error: unknown) {
       catchErr(error)

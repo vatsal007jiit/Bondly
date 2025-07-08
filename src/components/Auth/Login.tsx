@@ -1,13 +1,12 @@
 import { useState } from "react";
 import logo from "../../Images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-// import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import HttpInterceptor from "../../lib/HttpInterceptor";
 import Form, { FormDataType } from "../shared/Form";
 import Input from "../shared/Input";
 
-// import { mutate } from "swr";
+
 import catchErr from "../../lib/CatchErr";
 import { initializeSocket } from "../../lib/socket";
 
@@ -25,7 +24,7 @@ export default function Signin() {
       
       // Initialize WebSocket connection
       initializeSocket();
-      console.log("WebSocket initialized after login");
+      // console.log("WebSocket initialized after login");
 
 
       navigate('/home')

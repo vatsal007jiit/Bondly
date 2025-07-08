@@ -16,7 +16,7 @@ const Friend_Bday = () => {
   const fetchData = async () => {
     try {
       const { data } = await HttpInterceptor.get("/friend/fetch");
-      console.log(data.friends);
+     
       if (data.friends) {
         setUsers(data.friends);
         setLoading(false);

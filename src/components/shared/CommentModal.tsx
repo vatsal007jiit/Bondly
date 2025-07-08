@@ -26,7 +26,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
   const [editId, setEditId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
   
-console.log(comments)
+
   useEffect(() => {
     if (isOpen) setText('');
   }, [isOpen]);
@@ -85,13 +85,14 @@ console.log(comments)
     <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
       <div className="bg-white dark:bg-gray-800 w-full max-w-md max-h-[90vh] rounded-xl p-6 shadow-lg relative flex flex-col">
         {/* Close */}
-        <button
+        {!editId &&
+          <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-2xl"
         >
           <IoClose />
         </button>
-
+        }
         {/* Header */}
         <h2 className="text-xl font-bold mb-4 text-center text-gray-800 dark:text-white">Comments</h2>
 
