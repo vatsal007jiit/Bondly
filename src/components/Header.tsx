@@ -18,7 +18,8 @@ type HeaderProps = {
 
     useSWR('/auth/refresh-Token', Fetcher, {
       refreshInterval: 8 * 60 * 1000, // 8 min in ms [Access token expiry = 10 min]
-      shouldRetryOnError: false
+      shouldRetryOnError: false,
+      isVisible: () => true, //  overrides pause-on-inactive for this SWR only. So fetches even when tab inactive and token refreshed and user not logout
     })
 
 
