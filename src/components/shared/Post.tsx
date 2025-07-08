@@ -8,9 +8,11 @@ import { downloadData } from "../../lib/Download_Data";
 import catchErr from "../../lib/CatchErr";
 import HttpInterceptor from "../../lib/HttpInterceptor";
 import { toast } from "react-toastify";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
 import { Tooltip } from "antd";
 import UserContext from "../UserContext";
+import CommentModal from "./CommentModal";
+import Fetcher from "../../lib/Fetcher";
 
 
 interface PostInterface {
@@ -35,7 +37,9 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   const LikeIcon = liked ? "thumb-up-fill" : "thumb-up-line";
   const time = moment(created).fromNow();
   const likeValue = likes.length
-  
+  const [showCmt, setShowCmt] = useState(false)
+  const {data: comments} = useSWR(`/comment?post=${postId}`, Fetcher)
+  console.log(comments)
   const download_Media = async () =>{
     if(post_media)
     {
@@ -88,6 +92,9 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   }
   }, [likes])
 
+  const openCommentModal = ()=>{
+    setShowCmt(true)
+  }
   return (
     <>
       <div className="bg-white dark:bg-gray-800 rounded-2xl  shadow-md p-5 mb-8">
@@ -144,10 +151,10 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
               </div>
             </Tooltip>
             <div className="flex gap-1">
-              <div className=" text-gray-500 w-6 h-6 rounded-full  flex justify-center items-center">
+              <div className=" text-gray-500 w-6 h-6 pr-1 rounded-full  flex justify-center items-center">
                 <FaComment />{" "}
               </div>
-              <div className="text-gray-600 dark:text-white">25K</div>
+              <div className="text-gray-600 dark:text-white">{comments?.length || 0}</div>
             </div>
           </div>
 
@@ -155,12 +162,20 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
             <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={()=>handleLike(postId)}>
               {likeStatus}
             </Btn>
-            <Btn type="secondary" icon="chat-3-line">
+            <Btn type="secondary" onclick={openCommentModal} icon="chat-3-line">
               Comment
             </Btn>
           </div>
         </div>
       </div>
+      {/* Comment Modal */}
+      <CommentModal
+        isOpen={showCmt}
+        onClose={() => setShowCmt(false)}
+        postId = {postId}
+        user={{id: user.id, name: user.fullName, dp: user.image }}
+        comments={comments}
+      />
     </>
   );
 };
