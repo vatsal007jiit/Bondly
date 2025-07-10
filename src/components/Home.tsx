@@ -24,7 +24,7 @@ const Home: React.FC = () => {
   const [postText, setPostText] = useState("");
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(4)
-  const { data: fdPosts, error, isLoading: loadingPosts } = useSWR(`/post?page=${page}&limit=${limit}`, Fetcher);
+  const { data: fdPosts, error, isLoading: loadingPosts, mutate: mutatePosts } = useSWR(`/post?page=${page}&limit=${limit}`, Fetcher);
 
   const handleNewPost = async (text: string, media?: File) => {
     try {
@@ -122,8 +122,7 @@ const Home: React.FC = () => {
               post_media={post.media}
               created={post.createdAt}
               likes={post.likes}
-              page={page}
-              limit={limit}
+              mutatePosts={mutatePosts}
             >
               {post.text}
             </Post>

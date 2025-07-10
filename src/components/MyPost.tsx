@@ -10,7 +10,7 @@ import Empty from "./shared/Empty";
 
 const MyPost = () => {
   const { session: user } = useContext(UserContext);
-  const { data, error, isLoading } = useSWR("/post/myPost", Fetcher);
+  const { data, error, isLoading, mutate: mutatePosts } = useSWR("/post/myPost", Fetcher);
 
   return (
     <>
@@ -31,6 +31,7 @@ const MyPost = () => {
               post_media= {post.media}
               created= {post.createdAt}
               icon= "delete"
+              mutatePosts={mutatePosts}
             >
               {post.text}
             </Post>

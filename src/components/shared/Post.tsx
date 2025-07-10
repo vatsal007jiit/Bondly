@@ -8,7 +8,7 @@ import { downloadData } from "../../lib/Download_Data";
 import catchErr from "../../lib/CatchErr";
 import HttpInterceptor from "../../lib/HttpInterceptor";
 import { toast } from "react-toastify";
-import useSWR , {mutate} from "swr";
+import useSWR from "swr";
 import { Tooltip } from "antd";
 import UserContext from "../UserContext";
 import CommentModal from "./CommentModal";
@@ -24,10 +24,9 @@ interface PostInterface {
   post_media: string;
   created: string;
   icon?: "delete";
-  page?: number;
-  limit?: number;
+  mutatePosts: () => void | Promise<void>;
 }
-const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media, created, icon, page, limit}) =>
+const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media, created, icon, mutatePosts}) =>
 {
   const { session: user } = useContext(UserContext);
   const [liked, setLiked] = useState(false);
@@ -65,7 +64,8 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
       }
 
     toast.success(data.message)
-    mutate('/post/myPost')
+    // mutate('/post/myPost')
+    await mutatePosts();
     } 
     catch (error: unknown) {
       catchErr(error)
@@ -79,10 +79,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
       toast.success(data.message)
       // mutate(`/post?page=${page}&limit=${limit}`)
       // mutate('/post/myPost')
-      await Promise.all([
-      mutate(`/post?page=${page}&limit=${limit}`, undefined, { revalidate: true }),
-      mutate('/post/myPost', undefined, { revalidate: true })
-    ])
+      await mutatePosts(); // lifts update to parent so SWR updates live
     } 
     catch (error) {
      catchErr(error)  
