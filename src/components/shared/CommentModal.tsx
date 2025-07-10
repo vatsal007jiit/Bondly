@@ -43,7 +43,8 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
       if (!text.trim()) return;
       const {data} = await HttpInterceptor.post('/comment',{post:postId, text})
       toast.success(data.message)
-      mutate(`/comment?post=${postId}`)
+      // mutate(`/comment?post=${postId}`)
+      await mutate(`/comment?post=${postId}`, undefined, { revalidate: true }) // Force immediate revalidation
       
     } 
     catch (error) {
@@ -59,7 +60,8 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
       if (!text.trim()) return;
       const {data} = await HttpInterceptor.put(`/comment/${id}`,{text})
       toast.success(data.message)
-      mutate(`/comment?post=${postId}`)
+      // mutate(`/comment?post=${postId}`)
+      await mutate(`/comment?post=${postId}`, undefined, { revalidate: true })
     } 
     catch (error) {
       catchErr(error)
@@ -74,7 +76,8 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
     try {
       const {data} = await HttpInterceptor.delete(`/comment/${id}`)
       toast.success(data.message)
-      mutate(`/comment?post=${postId}`)
+      // mutate(`/comment?post=${postId}`)
+      await mutate(`/comment?post=${postId}`, undefined, { revalidate: true })
     } 
     catch (error) {
       catchErr(error)

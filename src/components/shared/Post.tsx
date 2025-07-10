@@ -77,8 +77,12 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
       const {data} = await HttpInterceptor.put(`/post/like/${id}`, {})
       setLiked((prev) => !prev);
       toast.success(data.message)
-      mutate(`/post?page=${page}&limit=${limit}`)
-      mutate('/post/myPost')
+      // mutate(`/post?page=${page}&limit=${limit}`)
+      // mutate('/post/myPost')
+      await Promise.all([
+      mutate(`/post?page=${page}&limit=${limit}`, undefined, { revalidate: true }),
+      mutate('/post/myPost', undefined, { revalidate: true })
+    ])
     } 
     catch (error) {
      catchErr(error)  
