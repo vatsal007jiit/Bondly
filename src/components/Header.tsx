@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { FiHome, FiLogOut, FiSearch, FiUser,FiMoon, FiSun } from "react-icons/fi";
+import { FiHome, FiLogOut,FiUser,FiMoon, FiSun } from "react-icons/fi";
 import logo from "../Images/Logo-B2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import useSWR from "swr";
