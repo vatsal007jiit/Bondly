@@ -19,10 +19,11 @@ interface CommentModalProps {
   onClose: () => void;
   postId: string
   user: { id: string; name: string; dp: string; gender: string };
-  comments: CommentInterface[]
+  comments: CommentInterface[];
+  mutateComments: () => Promise<any>;
 }
 
-const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, comments }) => {
+const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, comments, mutateComments }) => {
   const [text, setText] = useState('');
   const [editId, setEditId] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
@@ -45,10 +46,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
       // await mutate(`/comment?post=${postId}`, undefined, { revalidate: true })
-      await mutate(`/comment?post=${postId}`, async () => {
-        const { data } = await HttpInterceptor.get(`/comment?post=${postId}`);
-        return data;
-      }, false);
+      await mutateComments();
       
     } 
     catch (error) {
@@ -66,10 +64,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
       // await mutate(`/comment?post=${postId}`, undefined, { revalidate: true })
-      await mutate(`/comment?post=${postId}`, async () => {
-        const { data } = await HttpInterceptor.get(`/comment?post=${postId}`);
-        return data;
-      }, false);
+      await mutateComments();
     } 
     catch (error) {
       catchErr(error)
@@ -86,10 +81,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
       // await mutate(`/comment?post=${postId}`, undefined, { revalidate: true })
-      await mutate(`/comment?post=${postId}`, async () => {
-        const { data } = await HttpInterceptor.get(`/comment?post=${postId}`);
-        return data;
-      }, false);
+      await mutateComments();
     } 
     catch (error) {
       catchErr(error)

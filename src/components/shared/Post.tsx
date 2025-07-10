@@ -38,7 +38,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   const time = moment(created).fromNow();
   const likeValue = likes.length
   const [showCmt, setShowCmt] = useState(false)
-  const {data: comments} = useSWR(`/comment?post=${postId}`, Fetcher)
+  const {data: comments, mutate: mutateComments} = useSWR(`/comment?post=${postId}`, Fetcher)
 
 
   const download_Media = async () =>{
@@ -77,9 +77,12 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
       const {data} = await HttpInterceptor.put(`/post/like/${id}`, {})
       setLiked((prev) => !prev);
       toast.success(data.message)
-      mutate(`/post?page=${page}&limit=${limit}`)
-      mutate('/post/myPost')
-    
+      // mutate(`/post?page=${page}&limit=${limit}`)
+      // mutate('/post/myPost')
+      await Promise.all([
+      mutate(`/post?page=${page}&limit=${limit}`, undefined, { revalidate: true }),
+      mutate('/post/myPost', undefined, { revalidate: true })
+    ])
     } 
     catch (error) {
      catchErr(error)  
@@ -177,6 +180,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
         postId = {postId}
         user={{id: user.id, name: user.fullName, dp: user.image, gender:user.gender }}
         comments={comments}
+        mutateComments={mutateComments}
       />
     </>
   );
