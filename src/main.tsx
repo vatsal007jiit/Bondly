@@ -10,6 +10,12 @@ createRoot(document.getElementById('root')!).render(
   <SWRConfig value={{
     provider: () => new Map(),
     isVisible: () => true, // forces SWR to behave like tab is always visible
+    refreshInterval: 0,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    dedupingInterval: 0,
+    errorRetryCount: 3,
+    errorRetryInterval: 1000
   }}>
     <App />
   </SWRConfig>

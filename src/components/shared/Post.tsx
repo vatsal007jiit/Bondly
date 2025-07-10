@@ -8,7 +8,7 @@ import { downloadData } from "../../lib/Download_Data";
 import catchErr from "../../lib/CatchErr";
 import HttpInterceptor from "../../lib/HttpInterceptor";
 import { toast } from "react-toastify";
-import useSWR, { mutate } from "swr";
+import useSWR , {mutate} from "swr";
 import { Tooltip } from "antd";
 import UserContext from "../UserContext";
 import CommentModal from "./CommentModal";
@@ -39,6 +39,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   const likeValue = likes.length
   const [showCmt, setShowCmt] = useState(false)
   const {data: comments} = useSWR(`/comment?post=${postId}`, Fetcher)
+
 
   const download_Media = async () =>{
     if(post_media)
@@ -173,7 +174,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
         isOpen={showCmt}
         onClose={() => setShowCmt(false)}
         postId = {postId}
-        user={{id: user.id, name: user.fullName, dp: user.image }}
+        user={{id: user.id, name: user.fullName, dp: user.image, gender:user.gender }}
         comments={comments}
       />
     </>

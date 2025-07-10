@@ -5,6 +5,7 @@ import HttpInterceptor from '../../lib/HttpInterceptor';
 import { toast } from 'react-toastify';
 import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
 import catchErr from '../../lib/CatchErr';
+import dp from '../../lib/DP';
 
 interface CommentInterface {
   _id: string;
@@ -17,7 +18,7 @@ interface CommentModalProps {
   isOpen: boolean;
   onClose: () => void;
   postId: string
-  user: { id: string; name: string; dp: string };
+  user: { id: string; name: string; dp: string; gender: string };
   comments: CommentInterface[]
 }
 
@@ -103,7 +104,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
              <div className="flex justify-between items-start gap-3 group hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-md"
               key={comment._id}>
                 {/* Avatar */}
-                <img src={comment.user.image} alt="dp" className="w-8 h-8 rounded-full" />
+                <img src={dp(comment.user.image, comment.user.gender)} alt="dp" className="w-8 h-8 rounded-full" />
 
                 {/* Comment Content */}
                 <div className="flex-1">
@@ -143,7 +144,7 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
 
         {/* Comment Input */}
         <div className="flex items-start gap-3 border-t border-gray-300 dark:border-gray-600 pt-3">
-          <img src={user.dp} alt="dp" className="w-9 h-9 rounded-full" />
+          <img src={dp(user.dp, user.gender)} alt="dp" className="w-9 h-9 rounded-full" />
           <div className="flex-1">
             <textarea
               value={text}

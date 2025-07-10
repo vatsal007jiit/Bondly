@@ -64,7 +64,7 @@ const Home: React.FC = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onPost={handleNewPost}
-        user={{ name: "You", dp: user.image }}
+        user={{ name: "You", dp: user.image, gender: user.gender }}
       />
 
       {/* Main Feed */}
