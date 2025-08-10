@@ -79,8 +79,11 @@ export default function Signin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl px-4 py-3 font-medium shadow-md active:scale-[.98] transition hover:shadow-lg bg-indigo-600 text-white"
-            > {loading ? "Signing in…" : "Sign In"} </button>
+              className="w-full rounded-xl px-4 py-3 font-medium shadow-md active:scale-[.98] transition hover:shadow-lg bg-indigo-600 text-white flex items-center justify-center gap-2"
+            > 
+              {loading && <i className="ri-loader-4-line animate-spin text-xl"></i>}
+              {loading ? "Signing in…" : "Sign In"} 
+            </button>
           </Form>
           {/* Footer */}
           <p className="mt-6 text-center text-sm text-gray-500">
