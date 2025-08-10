@@ -94,7 +94,7 @@ const Home: React.FC = () => {
               {
                 !postText ?
                 <Btn type="disabled">Post</Btn> :
-                <Btn onclick={() => handleNewPost(postText)}>Post</Btn>
+                <Btn onclick={() => handleNewPost(postText)} loading={isUploading}>Post</Btn>
               }
               
             </div>

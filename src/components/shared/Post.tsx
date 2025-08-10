@@ -31,6 +31,8 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   const { session: user } = useContext(UserContext);
   const [liked, setLiked] = useState(false);
   const [mediaUrl, setMediaUrl] = useState('')
+  const [isLiking, setIsLiking] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const likeStatus = liked ? "Liked" : "Like";
   const LikeBtnStyle = liked ? "primary" : "light";
   const LikeIcon = liked ? "thumb-up-fill" : "thumb-up-line";
@@ -54,7 +56,10 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
   
 
   const deletePost = async (postId: string, path: string|null) =>{
+    if (isDeleting) return; // Prevent multiple delete requests
+    
     try {
+      setIsDeleting(true);
       const{data} = await HttpInterceptor.delete(`/post/delete/${postId}`)
   
       if(path)
@@ -69,11 +74,16 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
     } 
     catch (error: unknown) {
       catchErr(error)
+    } finally {
+      setIsDeleting(false);
     }
   }
   
   const handleLike = async (id: string) => {
+    if (isLiking) return; // Prevent multiple like requests
+    
     try {
+      setIsLiking(true);
       const {data} = await HttpInterceptor.put(`/post/like/${id}`, {})
       setLiked((prev) => !prev);
       toast.success(data.message)
@@ -83,8 +93,9 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
     } 
     catch (error) {
      catchErr(error)  
+    } finally {
+      setIsLiking(false);
     }
-    
   };
 
   useEffect(()=>{
@@ -113,8 +124,20 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
           {
             icon === "delete" && 
             (
-            <button onClick={() => deletePost(postId, post_media)} className="absolute top-1 right-2 text-2xl text-gray-400 hover:text-gray-600 hover:dark:text-gray-200 transition-all cursor-pointer ">
-            <MdDeleteOutline />
+            <button 
+              onClick={() => deletePost(postId, post_media)} 
+              disabled={isDeleting}
+              className={`absolute top-1 right-2 text-2xl transition-all cursor-pointer ${
+                isDeleting 
+                  ? 'text-gray-300 cursor-not-allowed' 
+                  : 'text-gray-400 hover:text-gray-600 hover:dark:text-gray-200'
+              }`}
+            >
+              {isDeleting ? (
+                <i className="ri-loader-4-line animate-spin"></i>
+              ) : (
+                <MdDeleteOutline />
+              )}
             </button>
             )
           }
@@ -161,7 +184,7 @@ const Post: FC<PostInterface> = ({postId, likes, children, name, dp, post_media,
           </div>
 
           <div className="flex gap-2">
-            <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={()=>handleLike(postId)}>
+            <Btn type={LikeBtnStyle} icon={LikeIcon} onclick={()=>handleLike(postId)} loading={isLiking}>
               {likeStatus}
             </Btn>
             <Btn type="secondary" onclick={openCommentModal} icon="chat-3-line">

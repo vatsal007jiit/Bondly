@@ -26,6 +26,9 @@ interface CommentModalProps {
 const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, comments, mutateComments }) => {
   const [text, setText] = useState('');
   const [editId, setEditId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
   
 
@@ -40,8 +43,11 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
   if (!isOpen) return null;
 
   const handleSubmit = async() => {
+    if (isSubmitting) return; // Prevent multiple submissions
+    
     try {
       if (!text.trim()) return;
+      setIsSubmitting(true);
       const {data} = await HttpInterceptor.post('/comment',{post:postId, text})
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
@@ -54,12 +60,16 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
     }
     finally{
       setText('');
+      setIsSubmitting(false);
     }
   };
 
   const handleEdit = async(id: string, text:string)=>{
+    if (isEditing) return; // Prevent multiple edit requests
+    
     try {
       if (!text.trim()) return;
+      setIsEditing(true);
       const {data} = await HttpInterceptor.put(`/comment/${id}`,{text})
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
@@ -72,11 +82,15 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
      finally{
       setEditId(null)
       setText('');
+      setIsEditing(false);
     }
   }
 
   const handleDelete = async(id: string)=>{
+    if (isDeleting === id) return; // Prevent multiple delete requests for the same comment
+    
     try {
+      setIsDeleting(id);
       const {data} = await HttpInterceptor.delete(`/comment/${id}`)
       toast.success(data.message)
       // mutate(`/comment?post=${postId}`)
@@ -85,6 +99,8 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
     } 
     catch (error) {
       catchErr(error)
+    } finally {
+      setIsDeleting(null);
     }
   }
   
@@ -134,10 +150,17 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
                     </button>
                     <button
                       onClick={() => handleDelete(comment._id)}
-                      className="hover:text-red-500 transition cursor-pointer"
+                      disabled={isDeleting === comment._id}
+                      className={`hover:text-red-500 transition cursor-pointer ${
+                        isDeleting === comment._id ? 'text-gray-300 cursor-not-allowed' : ''
+                      }`}
                       title="Delete"
                     >
-                      <MdDeleteOutline />
+                      {isDeleting === comment._id ? (
+                        <i className="ri-loader-4-line animate-spin"></i>
+                      ) : (
+                        <MdDeleteOutline />
+                      )}
                     </button>
                   </div>
                 }
@@ -164,18 +187,32 @@ const CommentModal: FC<CommentModalProps> = ({ isOpen, onClose, postId, user, co
           {editId ?
           <button
             onClick={()=>handleEdit(editId, text)}
-            disabled={!text.trim()}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded disabled:opacity-50"
+            disabled={!text.trim() || isEditing}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded disabled:opacity-50 flex items-center gap-2"
           >
-             Save Changes
+            {isEditing ? (
+              <>
+                <i className="ri-loader-4-line animate-spin"></i>
+                Saving...
+              </>
+            ) : (
+              'Save Changes'
+            )}
           </button>
           :
           <button
             onClick={handleSubmit}
-            disabled={!text.trim()}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded disabled:opacity-50"
+            disabled={!text.trim() || isSubmitting}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded disabled:opacity-50 flex items-center gap-2"
           >
-            Send
+            {isSubmitting ? (
+              <>
+                <i className="ri-loader-4-line animate-spin"></i>
+                Sending...
+              </>
+            ) : (
+              'Send'
+            )}
           </button>
           }
         </div>

@@ -19,6 +19,7 @@ export default function ProfilePage() {
   const [fullName, setFullName] = useState(user.fullName);
   const [gender, setGender] = useState(user.gender);
   const [dob, setDob] = useState(moment(user.dob).format("YYYY-MM-DD"));
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,7 +40,11 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isUpdating) return; // Prevent multiple submissions
+    
     try {
+      setIsUpdating(true);
       const payload = {id:user.id , fullName, gender, dob, image: `https://bondly-network.s3.ap-south-1.amazonaws.com/profile-pic/dp_${user.id}.jpg` }
      
       const path = `profile-pic/dp_${user.id}.jpg`
@@ -48,7 +53,6 @@ export default function ProfilePage() {
       }
       await HttpInterceptor.post("/auth/updateProfile",payload)
     
-
       await mutate("/auth/refresh-Token")
       await mutate("/auth/session")
     
@@ -56,6 +60,8 @@ export default function ProfilePage() {
     }  
     catch (error: unknown) {
       catchErr(error)
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -126,9 +132,21 @@ export default function ProfilePage() {
           {/* Save Button */}
           <button
             type="submit"
-            className="mx-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 cursor-pointer rounded-xl transition font-semibold flex gap-2"
+            disabled={isUpdating}
+            className={`mx-auto px-6 py-2 cursor-pointer rounded-xl transition font-semibold flex gap-2 ${
+              isUpdating 
+                ? 'bg-gray-400 cursor-not-allowed' 
+                : 'bg-indigo-600 hover:bg-indigo-700'
+            } text-white`}
           >
-            Save Changes
+            {isUpdating ? (
+              <>
+                <i className="ri-loader-4-line animate-spin"></i>
+                Updating...
+              </>
+            ) : (
+              'Save Changes'
+            )}
           </button>
         </form>
       </div>
