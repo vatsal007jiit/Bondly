@@ -1,7 +1,7 @@
 # React + TypeScript + Vite
 
 Live Project Link - https://bondly-henna.vercel.app
-Test Credentials - akki@mail.com passowrd 12345
+Test Credentials - akki@mail.com password 12345
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
